@@ -47,7 +47,7 @@ app.use(
         
         host: 'localhost',
         user: 'root',
-        password : 'fotboll123',
+        password : 'password',
         port : 3306, //port mysql
         database:'nodejs_test'
 
@@ -105,7 +105,7 @@ var domain =  require('./domain');
 var db_connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password : 'fotboll123',
+    password : 'password',
     port : 3306, //port mysql
     database:'nodejs_test'
 });
