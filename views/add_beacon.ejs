@@ -1,0 +1,94 @@
+<%- include layouts/header.ejs %>
+
+    <div class="page-data">
+        
+        <form method="post" action="/beacon/add">
+            <fieldset id="required">
+                <label for="name">Name</label> <input type="text" id="name" name="name" required><br>
+                <label for="id">ID</label> <input type="text" id="id" name="id" required><br>
+                <label for="checkpoint">Checkpoint</label>
+                <select name="checkpoint", id="checkpoint">
+                    <% if(checkpoint_list.length){
+                        for(var i = 0;i < checkpoint_list.length;i++) { %>
+                            <option value="<%=checkpoint_list[i].id%>" > <%= checkpoint_list[i].name %>
+                            </option>
+                        <% }
+                     } %>
+                </select>
+            </fieldset>
+            <label for="geotag_check">GeoTag</label>
+            <input type="checkbox" id="geotag_check" name="geotag_check" value="no"
+                    onclick="showHideGeoInfo()">
+
+            <fieldset id="optional">
+                <div class="geotag_box" id="geotag_box">
+                    <button type="button" onclick="getLocation()">Get Location</button>
+                    <td class="label">Lat</td>
+                    <td>: <input type="text" name="pos_latitude" id="pos_latitude"></td>
+                    <td class="label">Long</td>
+                    <td>: <input type="text" name="pos_longitude" id="pos_longitude"></td>
+                    <div id="mapholder"></div>
+                </div>
+            </fieldset>
+           <input type="submit" name="submit" value="Save">
+           <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAddBeacon()">
+        </form>
+    </div>
+
+<script>
+
+
+
+function showHideGeoInfo() {
+    alert("hej");
+    if(document.getElementById('geotag_check').checked) {
+        document.getElementById('geotag_box').style.display='none';
+    } else {
+        document.getElementById('geotag_box').style.display='block';
+        }
+}
+
+var x = document.getElementById("mapholder");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPositionText);
+        navigator.geolocation.getCurrentPosition(showPositionOnMap);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPositionText(position) {
+    var lat = document.getElementById("pos_latitude");
+    var long = document.getElementById("pos_longitude");
+
+    lat.innerHTML = position.coords.latitude;
+    long.innerHTML = position.coords.longitude;
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+function showPositionOnMap(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=
+    "+latlon+"&zoom=14&size=400x300&sensor=false";
+
+    x.innerHTML = "<img src='"+img_url+"'>";
+}
+</script>
+
+<%- include layouts/footer.ejs %>

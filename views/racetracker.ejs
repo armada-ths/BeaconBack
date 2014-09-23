@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<link href="/../css/style.css" rel="stylesheet">
+<script type="text/javascript" src="/../js/all.js"></script>
+<head>
+<title>Armada - Beacon System</title>
+</head>
+<body>
+
+<input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
+
+<div class="page-data">
+    <h2>Placement</h2>
+ <div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th width="100px">Time</th>
+            <th>Beacon</th>
+            <th>User</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Team</th>
+        </tr>
+
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+        <tr>
+            <td><%=(data[i].timestamp)%></td>
+            <td><%=data[i].beacon_id%></td>
+            <td><%=data[i].user_id%></td>
+            <td><%=data[i].first_name%></td>
+            <td><%=data[i].last_name%></td>
+            <td><%=data[i].team_name%></td>
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="6">No action</td>
+         </tr>
+    <% } %>
+        
+                      
+        
+    </table>
+ </div>
+</div>
+
+<div class="page-data">
+    <h2>Checkpoints</h2>
+    <div class="data-table">
+        <table border="1" cellpadding="7" cellspacing="7">
+            <tr>
+                <th width="100px">Time</th>
+                <th>Beacon</th>
+                <th>User</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Team</th>
+            </tr>
+
+            <% if(data.length){ 
+                            
+             for(var i = 0;i < data.length;i++) { %>
+            <tr>
+                <td><%=(data[i].timestamp)%></td>
+                <td><%=data[i].beacon_id%></td>
+                <td><%=data[i].user_id%></td>
+                <td><%=data[i].first_name%></td>
+                <td><%=data[i].last_name%></td>
+                <td><%=data[i].team_name%></td>
+            </tr>
+        <% }
+
+         }else{ %>
+             <tr>
+                <td colspan="6">No action</td>
+             </tr>
+        <% } %>
+            
+                          
+            
+        </table>
+    </div>
+</div>
+<script>
+var reloading;
+
+function checkReloading() {
+    if (window.location.hash=="#autoreload") {
+        reloading=setTimeout("window.location.reload();", 5000);
+        document.getElementById("reloadCB").checked=true;
+    }
+}
+
+function toggleAutoRefresh(cb) {
+    if (cb.checked) {
+        window.location.replace("#autoreload");
+        reloading=setTimeout("window.location.reload();", 5000);
+    } else {
+        window.location.replace("#");
+        clearTimeout(reloading);
+    }
+}
+
+window.onload=checkReloading;
+</script>
+
+    </body>
+</html>

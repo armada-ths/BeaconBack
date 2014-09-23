@@ -1,0 +1,22 @@
+info:
+
+database setup:
+
+action(GROUP BY event_association_id)
+TIMESTAMP	BEACON_ID	ACTION_TYPE		EVENT_ASSOCIATION_ID	UID		FIRST_NAME	LAST_NAME	TEAM
+--belongs_to beacon(BEACON_ID)
+--belong_to event
+
+--event
+--has_many action(EVENT_ASSOCIATION_ID)
+--ID 		
+
+beacon:
+belongs_to checkpoint(CHECKPOINT ID)
+
+ID
+
+checkpoint (need atleast one beacon, abstraction layer for humans)
+has_many beacons
+
+ID 		HUMAN_ID/NAME
