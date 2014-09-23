@@ -73,7 +73,6 @@ exports.save = function(req,res){
     req.getConnection(function (err, connection) {
         
         var data = {
-            
             id    : input.id,
             name  : input.name,
             checkpoint_id : input.checkpoint

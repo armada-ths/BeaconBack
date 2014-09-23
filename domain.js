@@ -1,22 +1,10 @@
 
-var t = require('tcomb');
-
-// enum
-var Locale = t.enums.of('it_IT en_US');
-
-// a struct is a type containing properties (i.e. a class)
-var action = t.struct({
-  username: t.Str,          // string type
-  locale:   t.maybe(Locale) // maybe means optional
-});
-
-var SignUpOutput = t.struct({
-  id:       t.Num,          // number type
-  username: t.Str,
-  locale:   t.maybe(Locale)
-});
-
-module.exports = {
-  Locale:       Locale,
-  SignUpOutput: SignUpOutput
+var action = {
+  'type_id': 'number', 
+  'beacon_id': 'number',
+  'event_assoc_id': 'number',
+  'user_id': 'string',
+  'first_name': 'string',
+  'last_name': 'string',
+  'team_name': 'string',
 };
