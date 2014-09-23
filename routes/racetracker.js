@@ -11,34 +11,22 @@ exports.list = function(req, res){
             }
      		else
      		{
-     			checkpoint_rows.forEach(function(checkpoint) {
-     				
-	     			var beacon_query = connection.query('SELECT * FROM beacon WHERE checkpoint_id='+checkpoint.id,function(err,beacon_rows)
+     			checkpoint_rows.forEach(function(checkpoint){
+     				var actions_query = connection.query('SELECT * FROM action WHERE beacon_id in',function(err,action_rows)
 			        {
 			            if(err)
 			            {
 			                console.log("Error Selecting : %s ",err );
 			            }
-			            else
-			            {
-			            	beacon_rows.forEach(function(beacon)
-			            	{
-			            		var beacon_query = connection.query('SELECT * MIN(timestamp) FROM action WHERE beacon_id='+beacon.id+"AND type_id=0",function(err,action)
-						        {
-						            if(err)
-						            {
-						                console.log("Error Selecting : %s ",err );
-						            }
-						           
-					         	});
-			            	});
+			     		else
+			     		{
 			     			
-
-			            }
-			         });
+			     		}
+	     			});
 	     		});
+     			
      		}
-            res.render('racetracker',{page_title:"ArmadaLoppet!",data:{'checkpoints':checkpoint_list, 'positions': position_list});
+            res.render('racetracker',{page_title:"ArmadaLoppet!",data:checkpoint_list});
                 
            console.log(query.sql);
          });
