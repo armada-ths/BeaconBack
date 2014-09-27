@@ -75,7 +75,9 @@ exports.save = function(req,res){
         var data = {
             id    : input.id,
             name  : input.name,
-            checkpoint_id : input.checkpoint
+            checkpoint_id : input.checkpoint,
+            pos_longitude : input.pos_longitude,
+            pos_latitude : input.pos_latitude
         };
         
         var query = connection.query("INSERT INTO beacon set ? ",data, function(err, rows)

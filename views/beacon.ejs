@@ -11,6 +11,8 @@
                     <th>Name</th>
                     <th>ID</th>
                     <th>Checkpoint</th>
+                    <th>Longitude</th>
+                    <th>Latitude</th>
                     <th width="120px">Action</th>
                 </tr>
                                
@@ -23,6 +25,8 @@
                     <td><%=data[i].name%></td>
                     <td><%=data[i].id%></td>
                     <td><%=data[i].checkpoint_id%></td>
+                    <td><%=data[i].pos_longitude%></td>
+                    <td><%=data[i].pos_latitude%></td>
                     <td>
                         <a class="a-inside edit" href="../beacon/edit/<%=data[i].id%>">Edit</a>
                        

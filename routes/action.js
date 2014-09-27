@@ -23,7 +23,7 @@ exports.save = function(req,res){
     var input = JSON.parse(JSON.stringify(req.body));
     
     req.getConnection(function (err, connection) {
-        
+
         var idata = {
                 type_id     : input.type_id,
                 user_id     : input.user_id,
@@ -39,17 +39,13 @@ exports.save = function(req,res){
           if (err)
           {
               console.log("Error inserting : %s ",err );
-              res.json(JSON.stringify({'status':"QUERY_FAILED"}))
+              res.json({'status':"QUERY_FAILED"})
           }
           else
           {
-          	res.json(JSON.stringify({'status':"OK"}))
+          	res.json({'status':"OK"})
           }
-       	
-          
         });
-        
-       console.log(query.sql); //get raw query
-    
+        console.log(query.sql); //get raw query
     });
 };

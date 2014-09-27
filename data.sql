@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS `beacon` (
   `id` int(8) NOT NULL,
   `name` varchar(200) NOT NULL,
   `checkpoint_id` int(8) NOT NULL,
+  `pos_longitude` varchar(25),
+  `pos_latitude` varchar(25),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`checkpoint_id`) REFERENCES `checkpoint` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
@@ -46,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `beacon` (
 --
 -- Dumping data for table`beacon`
 --
-INSERT INTO `beacon` VALUES (44422,'North exit_1',1);
+INSERT INTO `beacon` VALUES (44422,'North exit_1',1, NULL, NULL);
 
 --
 -- Stable structure `action`

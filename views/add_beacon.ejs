@@ -19,36 +19,39 @@
             <label for="geotag_check">GeoTag</label>
             <input type="checkbox" id="geotag_check" name="geotag_check" value="no"
                     onclick="showHideGeoInfo()">
-
-            <fieldset id="optional">
-                <div class="geotag_box" id="geotag_box">
-                    <button type="button" onclick="getLocation()">Get Location</button>
-                    <td class="label">Lat</td>
-                    <td>: <input type="text" name="pos_latitude" id="pos_latitude"></td>
-                    <td class="label">Long</td>
-                    <td>: <input type="text" name="pos_longitude" id="pos_longitude"></td>
-                    <div id="mapholder"></div>
-                </div>
-            </fieldset>
+            <div class="geotag_box" id="geotag_box" style="display:none">
+                <fieldset id="optional">
+                   
+                        <button type="button" onclick="getLocation()">Get Location</button>
+                        <td class="label">Lat</td>
+                        <td>: <input type="text" name="pos_latitude" id="pos_latitude"></td>
+                        <td class="label">Long</td>
+                        <td>: <input type="text" name="pos_longitude" id="pos_longitude"></td>
+                        <div class="gmap-container" id="map-canvas" ></div>
+                </fieldset>
+                
+            </div>
+            
            <input type="submit" name="submit" value="Save">
            <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAddBeacon()">
         </form>
+
     </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry"></script>
 <script>
-
-
-
-function showHideGeoInfo() {
-    alert("hej");
-    if(document.getElementById('geotag_check').checked) {
-        document.getElementById('geotag_box').style.display='none';
-    } else {
+function showHideGeoInfo() 
+{
+    if(document.getElementById('geotag_check').checked) 
+    {
         document.getElementById('geotag_box').style.display='block';
-        }
+    } 
+    else 
+    {
+            document.getElementById('geotag_box').style.display='none';
+    }
 }
 
-var x = document.getElementById("mapholder");
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPositionText);
@@ -61,8 +64,8 @@ function showPositionText(position) {
     var lat = document.getElementById("pos_latitude");
     var long = document.getElementById("pos_longitude");
 
-    lat.innerHTML = position.coords.latitude;
-    long.innerHTML = position.coords.longitude;
+    lat.value = position.coords.latitude;
+    long.value = position.coords.longitude;
 }
 
 function showError(error) {
@@ -81,14 +84,85 @@ function showError(error) {
             break;
     }
 }
+
 function showPositionOnMap(position) {
-    var latlon = position.coords.latitude + "," + position.coords.longitude;
+    //var latlon = position.coords.latitude + "," + position.coords.longitude;
+    initialize(position.coords.latitude, position.coords.longitude);
+    //var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+
+    //"&zoom=14&size=400x300&sensor=false";
 
-    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center=
-    "+latlon+"&zoom=14&size=400x300&sensor=false";
+    //var x = document.getElementById("map-canvas");
 
-    x.innerHTML = "<img src='"+img_url+"'>";
+    //x.innerHTML = "<img src='"+img_url+"'>";
 }
+var poly;
+var geodesicPoly;
+var marker1;
+var marker2;
+
+function initialize(long, lati) {
+  var mapOptions = {
+    zoom: 14,
+    center: new google.maps.LatLng(long, lati)
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+      document.getElementById('info'));
+
+
+  marker1 = new google.maps.Marker({
+    map: map,
+    draggable: true,
+    position: new google.maps.LatLng(long, lati)
+  });
+
+  // marker2 = new google.maps.Marker({
+  //   map: map,
+  //   draggable: true,
+  //   position: new google.maps.LatLng(48.8566140, 2.35222190)
+  // });
+
+  //var bounds = new google.maps.LatLngBounds(marker1.getPosition(),
+  //    marker2.getPosition());
+  //map.fitBounds(bounds);
+
+  google.maps.event.addListener(marker1, 'position_changed', update);
+  //google.maps.event.addListener(marker2, 'position_changed', update);
+
+  // var polyOptions = {
+  //   strokeColor: '#FF0000',
+  //   strokeOpacity: 1.0,
+  //   strokeWeight: 3,
+  //   map: map,
+  // };
+  // poly = new google.maps.Polyline(polyOptions);
+
+  // var geodesicOptions = {
+  //   strokeColor: '#CC0099',
+  //   strokeOpacity: 1.0,
+  //   strokeWeight: 3,
+  //   geodesic: true,
+  //   map: map
+  // };
+  // geodesicPoly = new google.maps.Polyline(geodesicOptions);
+  update();
+}
+
+function update() {
+  //var path = [marker1.getPosition(), marker2.getPosition()];
+  //poly.setPath(path);
+  //geodesicPoly.setPath(path);
+  //var heading = google.maps.geometry.spherical.computeHeading(path[0],
+  //    path[1]);
+  document.getElementById('pos_longitude').value = marker1.getPosition().lng();
+  document.getElementById('pos_latitude').value = marker1.getPosition().lat();
+  //document.getElementById('destination').value = path[1].toString();
+}
+
+//google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 <%- include layouts/footer.ejs %>

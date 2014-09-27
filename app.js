@@ -49,7 +49,7 @@ app.use(
         user: 'root',
         password : 'fotboll123',
         port : 3306, //port mysql
-        database:'nodejs_test'
+        database:'nodejs_test2'
 
     },'pool') //or single
 
