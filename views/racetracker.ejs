@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<link href="/../css/style.css" rel="stylesheet">
+<link href="/../css/racetracker.css" rel="stylesheet">
 <script type="text/javascript" src="/../js/all.js"></script>
 <head>
 <title>Armada - Beacon System</title>
@@ -23,7 +23,7 @@
              for(var i = 0;i < data.length;i++) { %>
             <tr>
                 <td><%=(data[i].name)%></td>
-                <td><%=data[i].passed%></td>
+                <td><%=(data[i].passed)%></td>
             </tr>
         <% }
 
@@ -60,6 +60,5 @@ function toggleAutoRefresh(cb) {
 
 window.onload=checkReloading;
 </script>
-
-    </body>
-</html>
+    
+<%- include layouts/footer-sponsor.ejs %>
