@@ -31,7 +31,7 @@ exports.list = function(req, res){
 			     		}
 			     		console.log(actions_query.sql);
 	     			});
-	     		});
+	     		};
      		}
            console.log(checkpoint_query.sql);
          });
