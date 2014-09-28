@@ -1,25 +1,20 @@
-exports.list = function(req, res){
+exports.list = function(req, res)
+{
+  req.getConnection(function(err,connection)
+  {
+    var query = connection.query('SELECT * FROM action',function(err,rows)
+    {
+      if(err)
+          console.log("Error Selecting : %s ",err );
 
-  req.getConnection(function(err,connection){
-       
-        var query = connection.query('SELECT * FROM action',function(err,rows)
-        {
-            
-            if(err)
-                console.log("Error Selecting : %s ",err );
-
-            res.render('action',{page_title:"Actions",data:rows});
-                
-           
-         });
-         
-         console.log(query.sql);
-    });
-  
+      res.render('action',{page_title:"Actions",data:rows});
+     });
+     console.log(query.sql);
+  });
 };
 
 exports.save = function(req,res){
-    
+
     var input = JSON.parse(JSON.stringify(req.body));
     
     req.getConnection(function (err, connection) {

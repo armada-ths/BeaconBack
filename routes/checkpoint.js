@@ -1,4 +1,23 @@
-
+exports.idlist = function(req, rest)
+{
+  req.getConnection(function(err,connection){
+       
+    var query = connection.query('SELECT id FROM checkpoint',function(err,rows)
+    {
+        if(err)
+        {
+            console.log("Error Selecting : %s ",err );
+            res.json({'status': 'QUERY_FAILED'})
+        }
+        else
+        {
+          res.json(rows)
+        }
+        
+     });
+     console.log(query.sql);
+  });
+}
 /*
  * GET users listing.
  */

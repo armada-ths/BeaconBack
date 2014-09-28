@@ -1,3 +1,6 @@
+var connection  = require('express-myconnection'); 
+var mysql = require('mysql');
+
 var net = require('net')
 
 var Validator = require('jsonschema').Validator;
@@ -8,9 +11,9 @@ var domain =  require('./domain');
 var db_connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password : 'fotboll123',
+    password : 'password',
     port : 3306, //port mysql
-    database:'nodejs_test'
+    database:'nodejs_test2'
 });
 
 db_connection.connect(function(err) {

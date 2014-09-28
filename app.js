@@ -63,6 +63,8 @@ app.get('/checkpoint/delete/:id', checkpoint.delete_checkpoint);
 app.get('/checkpoint/edit/:id', checkpoint.edit);
 app.post('/checkpoint/edit/:id',checkpoint.save_edit);
 
+app.get('checkpoint/idlist',checkpoint.idlist);
+
 app.get('/beacon', beacon.list);
 app.get('/beacon/add', beacon.add);
 app.post('/beacon/add', beacon.save);
