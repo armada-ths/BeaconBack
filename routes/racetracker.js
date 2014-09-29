@@ -127,7 +127,6 @@ exports.checkpoint_status = function(req, res){
             }
             console.log(checkpoint_query.sql);
         });
-     
     });
 };
 
@@ -136,8 +135,9 @@ exports.goal_view = function(req, res){
     var async = require('async');
     req.getConnection(function(err,connection)
     {
-        var checkpoint_query = connection.query('SELECT * FROM checkpoint WHERE name='+goal_name,function(err,checkpoint_row)
+        var checkpoint_query = connection.query("SELECT * FROM checkpoint WHERE name='"+goal_name+"'",function(err,checkpoint_rows)
         {
+            
             if(err)
             {
                 console.log("Error Selecting : %s ",err );
@@ -145,7 +145,7 @@ exports.goal_view = function(req, res){
             else
             {
                 var checkpoint_list = [];
-                var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_row.id+') GROUP BY event_assoc_id, user_id',function(err,action_rows)
+                var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_rows[0].id+') GROUP BY first_name, last_name, team_name',function(err,action_rows)
                 {
                     if(err)
                     {
@@ -153,16 +153,18 @@ exports.goal_view = function(req, res){
                     }
                     else
                     {
-                        var temp = [checkpoint.name, action_rows.length];
-                        checkpoint_list.push(temp);
+                        action_rows.forEach(function(action)
+                        {
+                            var temp = ["GOAL",action.first_name, action.last_name, action.team_name, action.timestamp];
+                            checkpoint_list.push(temp);
+                        });
+                        res.json({'status': 'OK', 'data':checkpoint_list});
                     }
-
-                if (err) return next(err);
-                res.json({'draw': 1, 'recordsTotal': checkpoint_list.length, 'recordsFiltered': checkpoint_list.length,'data':checkpoint_list});
+                    console.log(actions_query.sql);
                 });
             }
+            
             console.log(checkpoint_query.sql);
         });
-     
     });
 };

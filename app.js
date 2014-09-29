@@ -81,6 +81,8 @@ app.get('/action/clear', action.clear_action);
 app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
 app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
+app.get('/armadaloppet/GoalView', racetracker.goal_view);
+
 
 
 app.use(app.router);

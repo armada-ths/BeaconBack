@@ -14,9 +14,10 @@
  -->
 <section>
     <div class="basic stopwatch"></div>
+    <%- include goal_view.ejs %>
 
     <%- include checkpoint_view.ejs %>
-    <%- include goal_view.ejs %>
+    
 </section>
 <!--<%- include layouts/footer-sponsor.ejs %>
 -->
@@ -146,7 +147,8 @@ var fetchPlaces = function() {
     });
 };
 google.maps.event.addDomListener(window, 'load', getLocation);
-var table
+var table;
+var table2;
 $(document).ready( function () {
     table = $('#checkpoint-table').dataTable( {
         "bServerSide": true,
@@ -169,6 +171,31 @@ $(document).ready( function () {
             type: "GET",
             dataType: 'json',
             url: '/armadaloppet/checkpointStatus'
+        }
+        } );
+    }, 5000 );
+
+    table2 = $('#finish-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/goalView'
+        }
+    } );
+    setInterval( function () {
+        //table.api().ajax.reload();
+        table2.fnDestroy();
+        table2 = $('#finish-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/goalView'
         }
         } );
     }, 5000 );
