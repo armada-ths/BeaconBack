@@ -5,6 +5,7 @@ body {
   width:100%;
   height:100%;
   background-image: url('/../images/hero.jpg');
+  background-repeat: no-repeat;
 }
 
 .footer
@@ -14,25 +15,30 @@ body {
    bottom:0px;
    height:150px;
    width:100%;
-
 }
-.thumbnail-image
-{
+
+.thumbnail-image{
 	margin: 0 auto;
     float:left;
 }	
 
-.checkpoint-info-container
-{
+.checkpoint-info-container{
+}
+.checkpoint-table-container{
+}
+.gmap-container{
 }
 
-.gmap-container{
-  
-  
+.datatable_wrapper{
 }
 .gmap{
-  width:60%;
+  
+}
+#map-canvas
+{
+  width:500px;
   height: 500px;
+  display: "";
 }
 
 .map-label {

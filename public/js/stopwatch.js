@@ -62,7 +62,7 @@ var Stopwatch = function(elem, options) {
   }
   
   function render() {
-    timer.innerHTML = clock/1000; 
+    timer.innerHTML = clock/1000 ; 
   }
   
   function delta() {

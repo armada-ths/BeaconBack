@@ -44,3 +44,22 @@ exports.save = function(req,res){
         console.log(query.sql); //get raw query
     });
 };
+
+exports.clear_action = function(req,res){
+          
+     var id = req.params.id;
+    
+     req.getConnection(function (err, connection) {
+        
+        connection.query("DELETE FROM action", function(err, rows)
+        {
+            
+             if(err)
+                 console.log("Error deleting : %s ",err );
+            
+             res.redirect('/action');
+             
+        });
+        
+     });
+};

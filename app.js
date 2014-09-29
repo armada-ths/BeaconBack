@@ -76,6 +76,7 @@ app.post('/beacon/edit/:id',beacon.save_edit);
 
 app.get('/action', action.list);
 app.post('/action/add', action.save);
+app.get('/action/clear', action.clear_action);
 
 app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
