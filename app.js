@@ -8,6 +8,8 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 
+var async = require('async');
+
 //load customers route
 var action = require('./routes/action');
 var racetracker = require('./routes/racetracker');
@@ -76,6 +78,8 @@ app.get('/action', action.list);
 app.post('/action/add', action.save);
 
 app.get('/armadaloppet', racetracker.list);
+app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
+app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
 
 
 app.use(app.router);

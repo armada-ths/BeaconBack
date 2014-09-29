@@ -2,7 +2,7 @@ exports.list = function(req, res)
 {
   req.getConnection(function(err,connection)
   {
-    var query = connection.query('SELECT * FROM action SORT BY timestamp DESC',function(err,rows)
+    var query = connection.query('SELECT * FROM action ORDER BY timestamp DESC',function(err,rows)
     {
       if(err)
           console.log("Error Selecting : %s ",err );
