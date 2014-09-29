@@ -24,10 +24,13 @@ body {
 
 .checkpoint-info-container
 {
-  left:5%;
 }
 
 .gmap-container{
+  
+  
+}
+.gmap{
   width:60%;
   height: 500px;
 }

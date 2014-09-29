@@ -20,16 +20,24 @@
     <%- include goal_view.ejs %>
     
 </div>
+<!--<%- include layouts/footer-sponsor.ejs %>
+-->
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.15&libraries=geometry"></script>
 <script src="/../js/markerwithlabel.js" type="text/javascript"></script>
 <script src="/../js/stopwatch.js" type="text/javascript"></script>
 <script src="/../js/jquery.dataTables.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+-->
+
 <script>
 var reloading;
 var markers = [];
-
+$(function(){
+    $("#example").dataTable();
+  })
 function checkReloading() {
     if (window.location.hash=="#autoreload") {
         reloading=setTimeout("window.location.reload();", 5000);
@@ -138,24 +146,39 @@ var fetchPlaces = function() {
             }
         }
     });
-    
 };
-
 google.maps.event.addDomListener(window, 'load', getLocation);
-
-//$('#example').css( "border", "3px solid red" );
-
+var table
+$(document).ready( function () {
+    table = $('#checkpoint-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/checkpointStatus'
+        }
+    } );
+    setInterval( function () {
+        //table.api().ajax.reload();
+        table.fnDestroy();
+        table = $('#checkpoint-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/checkpointStatus'
+        }
+        } );
+    }, 5000 );
+    
+} );
 window.setInterval(function(){
   fetchPlaces();
-  $('#example').dataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-        "dataType": 'json',
-        "url": "/armadaloppet/checkpointStatus",
-        "type": "GET"
-      }
-    } );
+  
 }, 5000);
 
 // var stopwatch_running = false;
@@ -183,4 +206,3 @@ window.setInterval(function(){
 
 </script>
     
-<%- include layouts/footer-sponsor.ejs %>
