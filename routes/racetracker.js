@@ -12,8 +12,8 @@ exports.list = function(req, res){
      		else
      		{
                 var checkpoint_list = [];
-                async.forEach(checkpoint_rows, function(checkpoint, callback) { //The second argument (callback) is the "task callback" for a specific messageId
-                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+') GROUP BY event_assoc_id',function(err,action_rows)
+                async.forEach(checkpoint_rows, function(checkpoint, callback) {
+                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+' GROUP BY checkpoint_id) GROUP BY event_assoc_id',function(err,action_rows)
                     {
                         if(err)
                         {
@@ -52,8 +52,8 @@ exports.checkpoint_map = function(req, res){
             else
             {
                 var checkpoint_list = [];
-                async.forEach(checkpoint_rows, function(checkpoint, callback) { //The second argument (callback) is the "task callback" for a specific messageId
-                    var action_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+') GROUP BY event_assoc_id',function(err,action_rows)
+                async.forEach(checkpoint_rows, function(checkpoint, callback) { 
+                    var action_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+' GROUP BY checkpoint_id) GROUP BY event_assoc_id',function(err,action_rows)
                     {
                         if(err)
                         {
@@ -105,8 +105,8 @@ exports.checkpoint_status = function(req, res){
             else
             {
                 var checkpoint_list = [];
-                async.forEach(checkpoint_rows, function(checkpoint, callback) { //The second argument (callback) is the "task callback" for a specific messageId
-                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+') GROUP BY event_assoc_id',function(err,action_rows)
+                async.forEach(checkpoint_rows, function(checkpoint, callback) {
+                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+' GROUP BY checkpoint_id) GROUP BY event_assoc_id',function(err,action_rows)
                     {
                         if(err)
                         {
@@ -147,7 +147,7 @@ exports.goal_view = function(req, res){
                 var checkpoint_list = [];
                 if (checkpoint_rows.length != 0)
                 {
-                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_rows[0].id+') GROUP BY first_name, last_name, team_name',function(err,action_rows)
+                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_rows[0].id+' GROUP BY checkpoint_id) GROUP BY first_name, last_name, team_name',function(err,action_rows)
                     {
                         if(err)
                         {

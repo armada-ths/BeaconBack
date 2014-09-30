@@ -64,6 +64,7 @@ app.post('/checkpoint/add', checkpoint.save);
 app.get('/checkpoint/delete/:id', checkpoint.delete_checkpoint);
 app.get('/checkpoint/edit/:id', checkpoint.edit);
 app.post('/checkpoint/edit/:id',checkpoint.save_edit);
+app.get('/checkpoint/show/:id', checkpoint.show_checkpoint);
 
 app.get('checkpoint/idlist',checkpoint.idlist);
 

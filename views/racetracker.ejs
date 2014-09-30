@@ -28,37 +28,67 @@
 <script src="/../js/stopwatch.js" type="text/javascript"></script>
 <script src="/../js/jquery.dataTables.min.js"></script>
 
-<!--<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
--->
-
 <script>
-var reloading;
-var markers = [];
-$(function(){
-    $("#example").dataTable();
-  })
-function checkReloading() {
-    if (window.location.hash=="#autoreload") {
-        reloading=setTimeout("window.location.reload();", 5000);
-        document.getElementById("reloadCB").checked=true;
-    }
-}
-
-function toggleAutoRefresh(cb) {
-    if (cb.checked) {
-        window.location.replace("#autoreload");
-        reloading=setTimeout("window.location.reload();", 5000);
-    } else {
-        window.location.replace("#");
-        clearTimeout(reloading);
-    }
-}
-
-window.onload=checkReloading;
 
 
+//CHECKPOINT STATUS, tables
+
+
+var table;
+var table2;
+$(document).ready( function () {
+    table = $('#checkpoint-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/checkpointStatus'
+        }
+    } );
+    setInterval( function () {
+        //table.api().ajax.reload();
+        table.fnDestroy();
+        table = $('#checkpoint-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/checkpointStatus'
+        }
+        } );
+    }, 5000 );
+
+    table2 = $('#finish-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/goalView'
+        }
+    } );
+    setInterval( function () {
+        //table.api().ajax.reload();
+        table2.fnDestroy();
+        table2 = $('#finish-table').dataTable( {
+        "bServerSide": true,
+        //"sAjaxSource": "/armadaloppet/checkpointStatus",
+        "sDom": 't',
+        "ajax": {
+            type: "GET",
+            dataType: 'json',
+            url: '/armadaloppet/goalView'
+        }
+        } );
+    }, 5000 );
+    
+} );
 //MAPS
-
 
 function getLocation() {
     if (navigator.geolocation) {
@@ -146,88 +176,12 @@ var fetchPlaces = function() {
         }
     });
 };
-google.maps.event.addDomListener(window, 'load', getLocation);
-var table;
-var table2;
-$(document).ready( function () {
-    table = $('#checkpoint-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/checkpointStatus'
-        }
-    } );
-    setInterval( function () {
-        //table.api().ajax.reload();
-        table.fnDestroy();
-        table = $('#checkpoint-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/checkpointStatus'
-        }
-        } );
-    }, 5000 );
 
-    table2 = $('#finish-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/goalView'
-        }
-    } );
-    setInterval( function () {
-        //table.api().ajax.reload();
-        table2.fnDestroy();
-        table2 = $('#finish-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/goalView'
-        }
-        } );
-    }, 5000 );
-    
-} );
+google.maps.event.addDomListener(window, 'load', getLocation);
 window.setInterval(function(){
   fetchPlaces();
   
 }, 5000);
-
-// var stopwatch_running = false;
-// a = document.getElementById("a-timer");
-
-// $(document).keypress(function(e) {
-//     alert(e.which)
-//     if(e.which == 13) 
-//     {
-//         if(!stopwatch_running)
-//         {
-//             alert("hej")
-//             aTimer.start();
-//             stopwatch_running= true;
-
-//         }
-//         else
-//         {
-//             aTimer.stop();
-//             stopwatch_running = false;
-//         }
-//     }
-    
-// });
 
 </script>
     
