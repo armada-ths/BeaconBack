@@ -165,6 +165,10 @@ exports.goal_view = function(req, res){
                         console.log(actions_query.sql);
                     });
                 }
+                else
+                {
+                    res.json({'status': 'FAILED'});
+                }
                 
             }
             
