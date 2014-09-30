@@ -1,0 +1,128 @@
+<%- include layouts/header.ejs %>
+
+<section>
+        <h3>Name</h3>
+            <%= data.name %>
+        <h3>ID</h3>
+            <%= data.id %>
+        <h3>Beacons</h3>
+        <% if(data.beacons.length){           
+            for(var i = 0;i < data.beacons.length;i++) { %>
+                <%=(i+1)%>
+                <%=data.beacons[i].name%>
+            <% }
+        }else{ %>
+            No beacons attached.
+        <% } %>
+</section>
+<section>
+        <h2>Location></h2>
+        <div class="gmap-container">
+            <div class="gmap" id="map-canvas" ></div>
+        </div>
+</section>
+<section>
+        <h2>Data</h2>
+        <h3>Exposure</h3>
+        <h4>People passed</h4>
+            <%= data.passed %>
+
+        <h3>Average time stayed.</h3>
+            <%= data.Average %>
+</section>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.15&libraries=geometry"></script>
+
+<script type="text/javascript">
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPositionOnMap);
+    } 
+}
+
+function showPositionOnMap(position) 
+{
+    initialize(position.coords.latitude, position.coords.longitude);
+}
+
+var map;
+
+function initialize(long, lati) {
+  var mapOptions = {
+    zoom: 12,
+    center: new google.maps.LatLng(long, lati),
+    mapTypeId: google.maps.MapTypeId.HYBRID
+  };
+
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+      document.getElementById('info'));
+
+}
+
+var fetchPlaces = function() {
+
+    //var infowindow =  new google.maps.InfoWindow({
+    //    content: ''
+    //});
+
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    $.ajax({
+        type: 'GET',
+        url : '/armadaloppet/checkpointMap/'+data.id,
+        dataType : 'json',
+        success : function(response) {
+
+            if (response.status == 'OK') {
+                checkpoints = response.checkpoints;
+
+                // loop through places and add markers
+                for (i in checkpoints) {
+
+                    var tmpLatLng;
+                    if(checkpoints[i].cords)
+                    {
+                        var bound = new google.maps.LatLngBounds();
+                        for (var j = 0; j < checkpoints[i].cords.length; j++) {
+                          bound.extend( new google.maps.LatLng(checkpoints[i].cords[j].lat, checkpoints[i].cords[j].long) );
+                        }
+
+                        tmpLatLng = bound.getCenter();
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+
+                    var label = new MarkerWithLabel({
+                        map: map,
+                        draggable: false,
+                        //labelContent: "$hej",
+                        labelText: checkpoints[i].name +': '+checkpoints[i].passed,
+                        labelAnchor: new google.maps.Point(22, 0),
+                        labelClass: "map-label",
+                        labelInBackground: false,
+                        marker: MarkerWithLabel,
+                        optimized: false,
+                        //position: new google.maps.LatLng(long, lati)
+                        position: tmpLatLng
+                    });                
+
+                    // not currently used but good to keep track of markers
+                    markers.push(label);
+                }
+            }
+        }
+    });
+};
+
+google.maps.event.addDomListener(window, 'load', getLocation);
+</script>
+
+<%- include layouts/footer.ejs %>
