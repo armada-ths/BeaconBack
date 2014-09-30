@@ -145,23 +145,27 @@ exports.goal_view = function(req, res){
             else
             {
                 var checkpoint_list = [];
-                var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_rows[0].id+') GROUP BY first_name, last_name, team_name',function(err,action_rows)
+                if (checkpoint_rows.length != 0)
                 {
-                    if(err)
+                    var actions_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint_rows[0].id+') GROUP BY first_name, last_name, team_name',function(err,action_rows)
                     {
-                        console.log("Error Selecting : %s ",err );
-                    }
-                    else
-                    {
-                        action_rows.forEach(function(action)
+                        if(err)
                         {
-                            var temp = ["GOAL",action.first_name, action.last_name, action.team_name, action.timestamp];
-                            checkpoint_list.push(temp);
-                        });
-                        res.json({'status': 'OK', 'data':checkpoint_list});
-                    }
-                    console.log(actions_query.sql);
-                });
+                            console.log("Error Selecting : %s ",err );
+                        }
+                        else
+                        {
+                            action_rows.forEach(function(action)
+                            {
+                                var temp = ["GOAL",action.first_name, action.last_name, action.team_name, action.timestamp];
+                                checkpoint_list.push(temp);
+                            });
+                            res.json({'status': 'OK', 'data':checkpoint_list});
+                        }
+                        console.log(actions_query.sql);
+                    });
+                }
+                
             }
             
             console.log(checkpoint_query.sql);
