@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
+
+
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 <link href="/../css/racetracker.css" rel="stylesheet">
+<link rel="stylesheet" href="/../css/normalize.css">
 <link href="/../css/stopwatch.css" rel="stylesheet">
 <link href="/../css/dataTable.css" rel="stylesheet">
 <link href="/../css/markerwithlabel.css" rel="stylesheet">
@@ -13,9 +17,36 @@
 <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
  -->
 <section>
-    <div class="basic stopwatch"></div>
-    <%- include goal_view.ejs %>
+    <div id="start">
 
+        <div id="main">
+            <div id="counter">
+                <div id="hours" class="unit"></div>
+                <div class="divider">:</div>
+                <div id="minutes" class="unit"></div>
+                <div class="divider">:</div>
+                <div id="seconds" class="unit"></div>
+                <div class="divider">:</div>
+                <div id="centiseconds" class="unit"></div>
+            </div>
+            <!--
+            <div id="actions">
+                <a href="#start" class="btn"><i class="fa fa-play"></i></a>
+                <a href="#paused" class="btn"><i class="fa fa-pause"></i></a>
+                <a href="#stop" class="btn"><i class="fa fa-stop"></i></a>
+            </div>
+            -->
+        </div>
+
+    </div>
+    <!--
+    <div class="stopwatch-container">
+        <div class="basic stopwatch"></div>
+    </div>
+    -->
+    <!---
+    <%- include goal_view.ejs %>
+    -->
     <%- include checkpoint_view.ejs %>
     
 </section>
@@ -33,7 +64,7 @@
 
 //CHECKPOINT STATUS, tables
 
-
+/*
 var table;
 var table2;
 $(document).ready( function () {
@@ -88,8 +119,9 @@ $(document).ready( function () {
     }, 5000 );
     
 } );
+*/
 //MAPS
-
+var markers = [];
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPositionOnMap);
@@ -107,7 +139,8 @@ function initialize(long, lati) {
   var mapOptions = {
     zoom: 12,
     center: new google.maps.LatLng(long, lati),
-    mapTypeId: google.maps.MapTypeId.HYBRID
+    mapTypeId: google.maps.MapTypeId.HYBRID,
+    disableDefaultUI: true
   };
 
   map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -123,10 +156,11 @@ var fetchPlaces = function() {
     //var infowindow =  new google.maps.InfoWindow({
     //    content: ''
     //});
-
+    
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
+
     $.ajax({
         type: 'GET',
         url : '/armadaloppet/checkpointMap',
@@ -178,10 +212,32 @@ var fetchPlaces = function() {
 };
 
 google.maps.event.addDomListener(window, 'load', getLocation);
+
 window.setInterval(function(){
   fetchPlaces();
   
 }, 5000);
+
+var started = 0;
+
+$(document).keypress(function(e) {
+    //s
+  if(e.which == 115) {
+    window.location.href='#start'
+  }
+
+  //x
+  if(e.which == 120)
+  {
+    window.location.href='#stop'
+  }
+
+  //p
+  if(e.which == 112)
+  {
+    window.location.href='#pause'
+  }
+});
 
 </script>
     

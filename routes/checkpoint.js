@@ -147,3 +147,64 @@ exports.delete_checkpoint = function(req,res){
 };
 
 
+exports.show = function(req, res){
+    
+    var id = req.params.id;
+    
+    req.getConnection(function(err,connection){
+       
+        var query = connection.query('SELECT * FROM checkpoint WHERE id = ?',[id],function(err,rows)
+        {
+            
+            if(err)
+                console.log("Error Selecting : %s ",err );
+     
+            res.render('show_checkpoint',{page_title:"checkpoint",data:rows});
+                
+           
+         });
+         
+         console.log(query.sql);
+    }); 
+};
+
+exports.id_list = function(req, res){
+  req.getConnection(function(err,connection){ 
+    var query = connection.query('SELECT id FROM checkpoint',function(err,rows)
+    {       
+      if(err)
+        console.log("Error Selecting : %s ",err );
+
+      res.json({'status': 'OK', 'data':rows});         
+     });    
+     console.log(query.sql);
+  }); 
+};
+
+
+exports.compare = function(req, res){
+    
+  var c_ids = req.params.ids.split(',');
+
+  req.getConnection(function(err,connection){
+     
+    var checkpoint_list = [];
+      var actions_query = connection.query('SELECT * FROM action a WHERE checkpoint_id IN (?) GROUP BY user_id HAVING COUNT(*) >= 2',c_ids.toString(),function(err,action_rows)
+      {
+        if(err)
+        {
+          console.log("Error Selecting : %s ",err );
+        }
+        else
+        {
+          action_rows.forEach(function(r)
+          {
+            console.log(r);
+          });
+          
+          res.render('compare_checkpoint',{page_title:"checkpoint",data:action_rows});
+        }
+        console.log(actions_query.sql);
+      });
+  }); 
+};

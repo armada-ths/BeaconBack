@@ -3,13 +3,16 @@
         <div class="page-data">
          <div class="data-btn">
            <button onClick="addCheckpoint();">+ Add</button>
+           <button onClick="compareCheckpoints();">= Compare</button>
          </div>
          <div class="data-table">
+
             <table border="1" cellpadding="7" cellspacing="7">
                 <tr>
                     <th width="50px">No</th>
                     <th>Name</th>
                     <th>id</th>
+                    <th>Compare</th>
                     <th width="120px">Action</th>
                 </tr>
                                
@@ -21,7 +24,7 @@
                     <td><%=(i+1)%></td>
                     <td><%=data[i].name%></td>
                     <td><%=data[i].id%></td>
-
+                    <td><input type="checkbox" name="<%=data[i].id%>"%></td>
                     <td>
                         <a class="a-inside edit" href="../checkpoint/edit/<%=data[i].id%>">Edit</a>
                         <a class="a-inside show" href="../checkpoint/show/<%=data[i].id%>">Details</a>
@@ -38,10 +41,26 @@
                  </tr>
             <% } %>
                 
-                              
-                
             </table>
          </div>
         </div>
+
+<script type="text/javascript">
+function compareCheckpoints(){
+    var id_list = [];
+    var cbs = document.getElementsByTagName('input');
+      for(var i=0; i < cbs.length; i++) {
+        if(cbs[i].type == 'checkbox') {
+            if(cbs[i].checked)
+            {
+                id_list.push(cbs[i].name);
+            }
+        }
+      }
+
+    window.location.href = '/checkpoint/compare/'+id_list.toString();
+}
+
+</script>
         
 <%- include layouts/footer.ejs %>

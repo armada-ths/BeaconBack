@@ -60,13 +60,15 @@ CREATE TABLE IF NOT EXISTS `action` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type_id` int(8) NOT NULL,
   `beacon_id` int(8) NOT NULL,
+  `checkpoint_id` int(8) NOT NULL,
   `event_assoc_id` int(16) NOT NULL,
   `user_id` varchar(15) NOT NULL,
   `first_name` varchar(20),
   `last_name` varchar(20),
   `team_name` varchar(30),
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`beacon_id`) REFERENCES `beacon` (`id`)
+  FOREIGN KEY (`beacon_id`) REFERENCES `beacon` (`id`),
+  FOREIGN KEY (`checkpoint_id`) REFERENCES `checkpoint` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --

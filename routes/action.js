@@ -15,34 +15,46 @@ exports.list = function(req, res)
 
 exports.save = function(req,res){
 
-    var input = JSON.parse(JSON.stringify(req.body));
-    
-    req.getConnection(function (err, connection) {
-
-        var idata = {
-                type_id     : input.type_id,
-                user_id     : input.user_id,
-                first_name  : input.first_name,
-                last_name   : input.last_name,
-                beacon_id   : input.beacon_id,
-                event_assoc_id  : input.event_assoc_id,
-                team_name   : input.team_name
-            };
-        
-        var query = connection.query("INSERT INTO action set ? ",idata, function(err, rows)
+  var input = JSON.parse(JSON.stringify(req.body));
+  
+  req.getConnection(function (err, connection) {
+      var c_query = connection.query("SELECT * FROM checkpoint WHERE id IN (SELECT checkpoint_id FROM beacon WHERE id=?)",input.beacon_id, function(err, checkpoint_row)
+      {
+        if (err)
         {
-          if (err)
+            console.log("Error inserting : %s ",err );
+            res.json({'status':"QUERY_FAILED"})
+        }
+        else
+        {
+          var idata = {
+              type_id     : input.type_id,
+              user_id     : input.user_id,
+              first_name  : input.first_name,
+              last_name   : input.last_name,
+              beacon_id   : input.beacon_id,
+              checkpoint_id : checkpoint_row[0].id,
+              event_assoc_id  : input.event_assoc_id,
+              team_name   : input.team_name
+          };
+      
+          var a_query = connection.query("INSERT INTO action set ? ",idata, function(err, rows)
           {
-              console.log("Error inserting : %s ",err );
-              res.json({'status':"QUERY_FAILED"})
-          }
-          else
-          {
-          	res.json({'status':"OK"})
-          }
-        });
-        console.log(query.sql); //get raw query
-    });
+            if (err)
+            {
+                console.log("Error inserting : %s ",err );
+                res.json({'status':"QUERY_FAILED"})
+            }
+            else
+            {
+              res.json({'status':"OK"})
+            }
+          });
+          console.log(a_query.sql); //get raw query
+        }
+      });
+      console.log(c_query.sql); //get raw query
+  });
 };
 
 exports.clear_action = function(req,res){

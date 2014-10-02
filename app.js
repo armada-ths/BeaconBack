@@ -51,7 +51,7 @@ app.use(
         user: 'root',
         password : 'fotboll123',
         port : 3306, //port mysql
-        database:'nodejs_test2'
+        database:'nodejs_test3'
 
     },'pool') //or single
 
@@ -64,9 +64,11 @@ app.post('/checkpoint/add', checkpoint.save);
 app.get('/checkpoint/delete/:id', checkpoint.delete_checkpoint);
 app.get('/checkpoint/edit/:id', checkpoint.edit);
 app.post('/checkpoint/edit/:id',checkpoint.save_edit);
-app.get('/checkpoint/show/:id', checkpoint.show_checkpoint);
+app.get('/checkpoint/show/:id', checkpoint.show);
 
-app.get('checkpoint/idlist',checkpoint.idlist);
+app.get('/checkpoint/compare/:ids', checkpoint.compare)
+
+app.get('checkpoint/idList',checkpoint.id_list);
 
 app.get('/beacon', beacon.list);
 app.get('/beacon/add', beacon.add);
@@ -81,10 +83,11 @@ app.get('/action/clear', action.clear_action);
 
 app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
-app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
+//app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
 app.get('/armadaloppet/GoalView', racetracker.goal_view);
 
 
+app.get('/isArmadaloppet', racetracker.is_armadaloppet);
 
 app.use(app.router);
 
