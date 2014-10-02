@@ -190,11 +190,11 @@ exports.compare = function(req, res){
      
     var checkpoint_list = [];
       var actions_query = connection.query('SELECT a1.*, ABS(TIMESTAMPDIFF(second, a1.timestamp, a2.timestamp)) AS timediff\
-        FROM action a1\
+        FROM action a1 \
         INNER JOIN\
         action a2\
         on a1.user_id = a2.user_id\
-        WHERE a1.checkpoint_id AND a2.checkpoint_id IN (?)',c_ids.toString(),function(err,action_rows)
+        WHERE a1.checkpoint_id AND a2.checkpoint_id IN (?) GROUP BY checkpoint_id, user_id',c_ids.toString(),function(err,action_rows)
       {
         if(err)
         {
