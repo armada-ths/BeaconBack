@@ -189,7 +189,12 @@ exports.compare = function(req, res){
   req.getConnection(function(err,connection){
      
     var checkpoint_list = [];
-      var actions_query = connection.query('SELECT * FROM action a WHERE checkpoint_id IN (?) GROUP BY user_id HAVING COUNT(*) >= 2',c_ids.toString(),function(err,action_rows)
+      var actions_query = connection.query('SELECT a1.*, ABS(TIMESTAMPDIFF(second, a1.timestamp, a2.timestamp)) AS timediff\
+        FROM action a1\
+        INNER JOIN\
+        action a2\
+        on a1.user_id = a2.user_id\
+        WHERE a1.checkpoint_id AND a2.checkpoint_id IN (?)',c_ids.toString(),function(err,action_rows)
       {
         if(err)
         {
@@ -199,10 +204,15 @@ exports.compare = function(req, res){
         {
           action_rows.forEach(function(r)
           {
-            console.log(r);
+            if(r.timediff != 0)
+            {
+              var temp = {'first_name':r.first_name, 'last_name':r.last_name, 'team_name':r.team_name,'time': r.timediff};
+              checkpoint_list.push(temp);
+              console.log(temp);
+            }
           });
           
-          res.render('compare_checkpoint',{page_title:"checkpoint",data:action_rows});
+          res.render('compare_checkpoint',{page_title:"compare(appthehill)",data:checkpoint_list});
         }
         console.log(actions_query.sql);
       });

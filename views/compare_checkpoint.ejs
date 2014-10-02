@@ -1,51 +1,60 @@
 <%- include layouts/header.ejs %>
 
-    <div class="page-data">
+
+<div class="page-data">
+<input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
+
+ <div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th>firstname</th>
+            <th>lastname</th>
+            <th>teamname</th>
+            <th>time</th>
+        </tr>
+
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+        <tr>
+            <td><%=(data[i].first_name)%></td>
+            <td><%=data[i].last_name%></td>
+            <td><%=data[i].team_name%></td>
+            <td><%=data[i].time%></td>
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="6">No action</td>
+         </tr>
+    <% } %>
         
-        <table id="compare-table" class="finish-table-container" border="1" cellpadding="7" cellspacing="7">
-        <thead>
-            <tr role="row">
-                <th>Time1</th>
-                <th>Time2</th>
-                <th width="100px">Diff</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+                      
+        
     </table>
-    </div>
+ </div>
+</div>
+<script>
+var reloading;
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="/../js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
+function checkReloading() {
+    if (window.location.hash=="#autoreload") {
+        reloading=setTimeout("window.location.reload();", 10000);
+        document.getElementById("reloadCB").checked=true;
+    }
+}
 
-var table;
-$(document).ready( function () {
-    table = $('#compare-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/checkpointStatus'
-        }
-    } );
-    setInterval( function () {
-        //table.api().ajax.reload();
-        table.fnDestroy();
-        table = $('#checkpoint-table').dataTable( {
-        "bServerSide": true,
-        //"sAjaxSource": "/armadaloppet/checkpointStatus",
-        "sDom": 't',
-        "ajax": {
-            type: "GET",
-            dataType: 'json',
-            url: '/armadaloppet/checkpointStatus'
-        }
-        } );
-    }, 5000 );    
-} );
+function toggleAutoRefresh(cb) {
+    if (cb.checked) {
+        window.location.replace("#autoreload");
+        reloading=setTimeout("window.location.reload();", 10000);
+    } else {
+        window.location.replace("#");
+        clearTimeout(reloading);
+    }
+}
 
+window.onload=checkReloading;
 </script>
 <%- include layouts/footer.ejs %>
