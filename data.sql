@@ -56,7 +56,7 @@ INSERT INTO `beacon` VALUES (44422,'North exit_1',1, NULL, NULL);
 
 
 CREATE TABLE IF NOT EXISTS `action` (
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type_id` int(8) NOT NULL,
   `beacon_id` int(8) NOT NULL,

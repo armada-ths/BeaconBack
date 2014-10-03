@@ -27,7 +27,9 @@ exports.save = function(req,res){
         }
         else
         {
-          var idata = {
+          if(checkpoint_row[0])
+          {
+            var idata = {
               type_id     : input.type_id,
               user_id     : input.user_id,
               first_name  : input.first_name,
@@ -36,21 +38,29 @@ exports.save = function(req,res){
               checkpoint_id : checkpoint_row[0].id,
               event_assoc_id  : input.event_assoc_id,
               team_name   : input.team_name
-          };
+            };
       
-          var a_query = connection.query("INSERT INTO action set ? ",idata, function(err, rows)
-          {
-            if (err)
+            var a_query = connection.query("INSERT INTO action set ? ",idata, function(err, rows)
             {
-                console.log("Error inserting : %s ",err );
-                res.json({'status':"QUERY_FAILED"})
-            }
-            else
+              if (err)
+              {
+                  console.log("Error inserting : %s ",err );
+                  res.json({'status':"QUERY_FAILED"})
+              }
+              else
+              {
+                res.json({'status':"OK"})
+              }
+            });
+            console.log(a_query.sql); //get raw query
+          }
+          else{
             {
-              res.json({'status':"OK"})
-            }
-          });
-          console.log(a_query.sql); //get raw query
+            console.log("Error inserting : %s ",err );
+            res.json({'status':"QUERY_FAILED"})
+        }
+          }
+          
         }
       });
       console.log(c_query.sql); //get raw query
