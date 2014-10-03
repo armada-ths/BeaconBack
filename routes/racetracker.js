@@ -58,7 +58,8 @@ exports.checkpoint_map = function(req, res){
             {
                 var checkpoint_list = [];
                 async.forEach(checkpoint_rows, function(checkpoint, callback) { 
-                    var action_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+' ) GROUP BY checkpoint_id, user_id, event_assoc_id',function(err,action_rows)
+                    var action_query = connection.query('SELECT * FROM action WHERE beacon_id IN (SELECT id FROM beacon WHERE checkpoint_id='+checkpoint.id+' ) GROUP BY checkpoint_id, user_id',function(err,action_rows)
+                    //ADD event_assoc_id after armadaloppet
                     {
                         if(err)
                         {
