@@ -204,7 +204,7 @@ exports.compare = function(req, res){
         {
           action_rows.forEach(function(r)
           {
-            if(r.timediff != 0)
+            if(r.timediff != 0 && c_ids.indexOf(""+r.checkpoint_id) > -1 )
             {
               var temp = {'first_name':r.first_name, 'last_name':r.last_name, 'team_name':r.team_name,'time': r.timediff};
               checkpoint_list.push(temp);
