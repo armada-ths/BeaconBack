@@ -3,6 +3,11 @@
 <div class="page-data">
 <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
 <a class="a-inside delete" href="../action/clear">Delete</a>
+<b>
+    <% if(data.length){ %>
+        <%=(data.length)%> Entires
+    <% } %>
+</b>
  <div class="data-table">
     <table border="1" cellpadding="7" cellspacing="7">
         <tr>

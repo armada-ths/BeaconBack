@@ -194,7 +194,7 @@ exports.compare = function(req, res){
         INNER JOIN\
         action a2\
         on a1.user_id = a2.user_id\
-        WHERE a1.checkpoint_id AND a2.checkpoint_id IN (?) GROUP BY checkpoint_id, user_id',c_ids.toString(),function(err,action_rows)
+        WHERE a1.checkpoint_id IN ('+c_ids.toString()+') AND a2.checkpoint_id IN ('+c_ids.toString()+') GROUP BY checkpoint_id, user_id',function(err,action_rows)
       {
         if(err)
         {
@@ -204,15 +204,22 @@ exports.compare = function(req, res){
         {
           action_rows.forEach(function(r)
           {
-            if(r.timediff != 0 && c_ids.indexOf(""+r.checkpoint_id) > -1 )
+            if(r.timediff > 0)
             {
-              var temp = {'first_name':r.first_name, 'last_name':r.last_name, 'team_name':r.team_name,'time': r.timediff};
+              //ugly but could not figure out sql to ignore the other checkpoint
+              var temp = {'first_name':r.first_name, 'last_name':r.last_name, 'team_name':r.team_name, 'user_id': r.user_id,'checkpoint_id': r.checkpoint_id, 'time': r.timediff};
               checkpoint_list.push(temp);
               console.log(temp);
             }
+              
+            if(c_ids.indexOf(r.checkpoint_id) > -1)
+            {
+
+              console.log("FAIL: "+r.checkpoint_id +", "+c_ids)
+            }
           });
           
-          res.render('compare_checkpoint',{page_title:"compare(appthehill)",data:checkpoint_list});
+          res.render('compare_checkpoint',{page_title:"compare(appthehill), Ignores time 0 :(",data:checkpoint_list});
         }
         console.log(actions_query.sql);
       });

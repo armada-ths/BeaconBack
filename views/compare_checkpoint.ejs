@@ -3,13 +3,19 @@
 
 <div class="page-data">
 <input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
-
+<b>
+    <% if(data.length){ %>
+        <%=(data.length)%> Entires
+    <% } %>
+</b>
  <div class="data-table">
     <table border="1" cellpadding="7" cellspacing="7">
         <tr>
             <th>firstname</th>
             <th>lastname</th>
             <th>teamname</th>
+            <th>userid</th>
+            <td>Checkpoint</td>
             <th>time</th>
         </tr>
 
@@ -20,6 +26,8 @@
             <td><%=(data[i].first_name)%></td>
             <td><%=data[i].last_name%></td>
             <td><%=data[i].team_name%></td>
+            <td><%=data[i].user_id%></td>
+            <td><%=data[i].checkpoint_id%></td>
             <td><%=data[i].time%></td>
         </tr>
     <% }
