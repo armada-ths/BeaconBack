@@ -16,10 +16,9 @@ var racetracker = require('./routes/racetracker');
 var beacon = require('./routes/beacon'); 
 var checkpoint = require('./routes/checkpoint'); 
 
-var posix = require('posix');
-
+//var posix = require('posix');
 // raise maximum number of open file descriptors to 10k,
-posix.setrlimit('nofile', { soft: 10000,  hard: 10000 });
+//posix.setrlimit('nofile', { soft: 10000,  hard: 10000 });
 
 var app = express();
 
