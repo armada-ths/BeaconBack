@@ -14,7 +14,9 @@ var async = require('async');
 var action = require('./routes/action');
 var racetracker = require('./routes/racetracker');
 var beacon = require('./routes/beacon'); 
-var checkpoint = require('./routes/checkpoint'); 
+var checkpoint = require('./routes/checkpoint');
+var fair = require('./routes/fair');
+var user = require('./routes/user');
 
 //var posix = require('posix');
 // raise maximum number of open file descriptors to 10k,
@@ -91,9 +93,15 @@ app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
 //app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
 app.get('/armadaloppet/GoalView', racetracker.goal_view);
-
-
 app.get('/isArmadaloppet', racetracker.is_armadaloppet);
+
+
+app.get('/fair', fair.list);
+app.get('/fair/heatMap', fair.heat_map);
+app.get('/fair/checkpointMap', fair.checkpoint_map);
+app.get('/fair/checkpointStatus', fair.checkpoint_status);
+
+app.get('/user', user.list);
 
 app.use(app.router);
 
