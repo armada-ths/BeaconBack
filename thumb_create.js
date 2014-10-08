@@ -5,7 +5,7 @@ var thumb = require('node-thumbnail').thumb;
 thumb({
   source: 'public/images',
   destination: 'public/thumbnails',
-  width: '150',
+  width: '250',
   concurrency: 4
 }, function(err) {
   console.log('All done!');
