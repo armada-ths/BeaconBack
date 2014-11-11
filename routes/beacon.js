@@ -34,11 +34,14 @@ exports.list = function(req, res){
 
 exports.add = function(req, res){
   req.getConnection(function(err,connection){
+    var fs = require('fs');
+    var map_files = fs.readdirSync("./public/map_templates/")
+    console.log(map_files)
     var query = connection.query('SELECT * FROM checkpoint',function(err,rows)
-    {   
+    {
       if(err)
           console.log("Error Selecting : %s ",err );
-      res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:rows});      
+      res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:rows, maps:map_files});      
      });         
      console.log(query.sql);
   });

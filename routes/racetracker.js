@@ -1,6 +1,6 @@
 
 exports.is_armadaloppet = function(req, res){
-    res.json({'armadaloppet':0});
+    res.json({'armadaloppet':1});
 };
 
 exports.list = function(req, res){
