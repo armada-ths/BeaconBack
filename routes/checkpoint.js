@@ -13,7 +13,6 @@ exports.idlist = function(req, rest)
         {
           res.json(rows)
         }
-        
      });
      console.log(query.sql);
   });

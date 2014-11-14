@@ -70,7 +70,7 @@ app.use(
 var arguments = process.argv.slice(2);
 console.log(arguments);
 if(arguments.length > 0){
-  if(arguments[0] == "--update"){
+  if(arguments[0] == "--update_companies"){
     var req = http.get('http://127.0.0.1:3000/api/map_info.json', function(res){
       var body = '';
 
@@ -83,14 +83,14 @@ if(arguments.length > 0){
         response.forEach(function(input){
           var data = {
               company_id    : input.id,
-              company_name  : input.name,
-              location      : 'POINT('+input.coord_x+', '+input.coord_y+')',
-              map           : input.map
+              company_name  : input.name
+              //location      : 'POINT('+input.coord_x+', '+input.coord_y+')',
+              //map           : input.map
           };
-          var connection = mysql.createConnection(db_options);
+          var c = mysql.createConnection(db_options);
 
-          connection.connect(function(err) {
-            var query = connection.query("INSERT INTO company set ? ",data, function(err, rows){
+          c.connect(function(err) {
+            var query = c.query("INSERT INTO company set ? ",data, function(err, rows){
               if (err)
                   console.log("Error inserting : %s ",err );
               console.log(query.sql); //get raw query
@@ -102,6 +102,36 @@ if(arguments.length > 0){
       });
     });
   }
+  if(arguments[0] == "--update_maps"){
+    var fs = require('fs');
+    var gm = require('gm').subClass({ imageMagick: true });
+    var map_files = fs.readdirSync("./public/map_templates/")
+    map_files.forEach(function(input){
+      console.log("Adding map in db: "+input);
+      gm('./public/map_templates/'+input).size(function (err, size) {
+        if (!err) {
+          var data = {
+          map_name    : input,
+          url         : '/map_templates/'+input,
+          height      : size.height,
+          width       : size.width
+          };
+          var c = mysql.createConnection(db_options);
+
+          c.connect(function(err) {
+            var query = c.query("INSERT INTO map set ? ",data, function(err, rows){
+              if (err)
+                console.log("Error inserting : %s ",err );
+            console.log(query.sql);
+            });
+          });
+        }
+        else{
+          console.log(err);
+        }
+      });
+    });
+  } 
 }
 
 app.get('/', routes.index);

@@ -34,16 +34,22 @@ exports.list = function(req, res){
 
 exports.add = function(req, res){
   req.getConnection(function(err,connection){
-    var fs = require('fs');
-    var map_files = fs.readdirSync("./public/map_templates/")
-    console.log(map_files)
-    var query = connection.query('SELECT * FROM checkpoint',function(err,rows)
+    var checkpoint_query = connection.query('SELECT * FROM checkpoint',function(err,checkpoint_rows)
     {
       if(err)
           console.log("Error Selecting : %s ",err );
-      res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:rows, maps:map_files});      
-     });         
-     console.log(query.sql);
+      else{
+        var map_query = connection.query('SELECT * FROM map',function(err,map_rows)
+        {
+          if(err)
+              console.log("Error Selecting : %s ",err );
+          else{
+            res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:checkpoint_rows, maps:map_rows});          }
+          //res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:rows, maps:map_files});      
+        });  
+      }
+      //res.render('add_beacon',{page_title:"Add Beacons",checkpoint_list:rows, maps:map_files});      
+    });
   });
 };
 
@@ -76,11 +82,13 @@ exports.save = function(req,res){
     req.getConnection(function (err, connection) {
         
         var data = {
-            id    : input.id,
-            name  : input.name,
+            id            : input.id,
+            name          : input.name,
             checkpoint_id : input.checkpoint,
+            location      : 'POINT('+input.pos_x+','+pos_y+')'
             pos_longitude : input.pos_longitude,
-            pos_latitude : input.pos_latitude
+            pos_latitude  : input.pos_latitude,
+            map           : input.map
         };
         
         var query = connection.query("INSERT INTO beacon set ? ",data, function(err, rows)

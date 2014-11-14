@@ -17,6 +17,8 @@ a {
 #pointer_div{
   background-repeat: no-repeat;
   background-size: cover;
+  width:1000px;
+  height: 1000px;
 }
 
 .map-label {

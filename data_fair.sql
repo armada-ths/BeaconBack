@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS `company` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company_id` int(5) NOT NULL,
   `company_name` varchar(30) NOT NULL,
-  `location` POINT NOT NULL,
-  `map` int(11) NOT NULL,
+  `location` POINT,
+  `map` int(11),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`map`) REFERENCES `map` (`id`)
 )ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
