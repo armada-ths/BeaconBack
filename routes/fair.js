@@ -5,6 +5,20 @@ exports.list = function(req, res)
     res.render('fair',{page_title:"OverWatch"});
   });
 }
+exports.status = function(req, res)
+{
+  req.getConnection(function(err,connection)
+  {
+    res.render('fair',{page_title:"OverWatch"});
+  });
+}
+exports.is_fair = function(req, res)
+{
+  req.getConnection(function(err,connection)
+  {
+    res.render('fair',{page_title:"OverWatch"});
+  });
+}
 
 exports.heat_map = function(req, res){
     var async = require('async');

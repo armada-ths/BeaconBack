@@ -17,6 +17,10 @@ var beacon = require('./routes/beacon');
 var checkpoint = require('./routes/checkpoint');
 var fair = require('./routes/fair');
 var user = require('./routes/user');
+var report = require('./routes/report');
+var company = require('./routes/company');
+var map = require('./routes/map');
+
 
 //var posix = require('posix');
 // raise maximum number of open file descriptors to 10k,
@@ -41,7 +45,6 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-//app.use('public/map_templates',express.static(path.join(__dirname, 'public/map_templates')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -53,19 +56,53 @@ app.use(express.cookieParser('keyboard cat'));
 app.use(express.session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
+var db_options = {
+    host: 'localhost',
+    user: 'root',
+    password : 'password',
+    port : 3306,
+    database:'armada_fair_test'
+  }
+
 app.use(
-    
-    connection(mysql,{
-        
-        host: 'localhost',
-        user: 'root',
-        password : 'password',
-        port : 3306, //port mysql
-        database:'nodejs_test3'
-
-    },'pool') //or single
-
+  connection(mysql,db_options,'pool') //or single
 );
+var arguments = process.argv.slice(2);
+console.log(arguments);
+if(arguments.length > 0){
+  if(arguments[0] == "--update"){
+    var req = http.get('http://127.0.0.1:3000/api/map_info.json', function(res){
+      var body = '';
+
+      res.on('data', function(chunk) {
+          body += chunk;
+      });
+
+      res.on('end', function() {
+        var response = JSON.parse(body)
+        response.forEach(function(input){
+          var data = {
+              company_id    : input.id,
+              company_name  : input.name,
+              location      : 'POINT('+input.coord_x+', '+input.coord_y+')',
+              map           : input.map
+          };
+          var connection = mysql.createConnection(db_options);
+
+          connection.connect(function(err) {
+            var query = connection.query("INSERT INTO company set ? ",data, function(err, rows){
+              if (err)
+                  console.log("Error inserting : %s ",err );
+              console.log(query.sql); //get raw query
+            });
+          });
+          
+          
+        });
+      });
+    });
+  }
+}
 
 app.get('/', routes.index);
 app.get('/checkpoint', checkpoint.list);
@@ -87,9 +124,9 @@ app.get('/beacon/delete/:id', beacon.delete_beacon);
 app.get('/beacon/edit/:id', beacon.edit);
 app.post('/beacon/edit/:id',beacon.save_edit);
 
-app.get('/action', action.list);
-app.post('/action/add', action.save);
-app.get('/action/clear', action.clear_action);
+app.get('armadaloppet/action', action.list);
+app.post('armadaloppet/action/add', action.save);
+app.get('armadaloppet/action/clear', action.clear_action);
 
 app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
@@ -99,11 +136,20 @@ app.get('/isArmadaloppet', racetracker.is_armadaloppet);
 
 
 app.get('/fair', fair.list);
-app.get('/fair/heatMap', fair.heat_map);
-app.get('/fair/checkpointMap', fair.checkpoint_map);
-app.get('/fair/checkpointStatus', fair.checkpoint_status);
+app.get('/fair/status', fair.status);
+app.get('/fair/isFair',fair.is_fair);
 
-app.get('/user', user.list);
+app.post('/fair/report/add', report.save);
+app.get('/fair/report', report.list);
+app.get('/fair/report/clear', report.clear_report);
+
+app.get('/fair/map', map.list);
+
+app.get('/fair/company', company.list);
+app.get('/fair/company/show/:id', company.show);
+
+app.get('/fair/user', user.list);
+app.get('fair/user/show/:id', user.show)
 
 app.use(app.router);
 
