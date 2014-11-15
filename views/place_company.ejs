@@ -1,0 +1,68 @@
+<%- include layouts/header.ejs %>
+
+    <div class="page-data">
+        
+        <form method="post" action="/fair/company/save_placement">
+            <fieldset id="required">
+                <label for="company">Company</label>
+                <select name="company", id="company">
+                    <% if(companies.length){
+                        for(var i = 0;i < companies.length;i++) { %>
+                            <option value="<%=companies[i].id%>" > <%= companies[i].company_name %>
+                            </option>
+                        <% }
+                     } %>
+                </select>
+            
+            <label for="map">MapTag</label>
+            <div class="maptag_box" id="maptag_box">
+                <fieldset id="optional">
+                        
+                        <select name="map_select", id="map_select", onchange="map_switch()">
+                          <% if(maps.length){
+                            for(var i = 0;i < maps.length;i++) { %>
+                                <option value="<%=maps[i].id%>"><%= maps[i].map_name %></option>
+                            <% }
+                          } %>
+                        </select>
+                        <td class="label">x</td>
+                        <td>: <input type="text" name="pos_x" id="pos_x"></td>
+                        <td class="label">y</td>
+                        <td>: <input type="text" name="pos_y" id="pos_y"></td>
+                        <div class="pointer_div" id="pointer_div" onclick="map_point(event)"></div>
+                </fieldset>
+            </div>
+            </fieldset>
+           <input type="submit" name="submit" value="save_placement">
+           <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelPlaceCompany()">
+        </form>
+
+    </div>
+<img src="../../images/marker.png" id="marker" style="display: none; position: absolute;" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+function map_switch(){
+ var select = document.getElementById('map_select');
+ //alert(window.location.hostname+":"+window.location.port+"/public/map_templates/"+select.value)
+ $('#pointer_div').css('background-image', "url(../../map_templates/"+select.options[select.selectedIndex].text+")");
+ $('#pointer_div').click(function(e)
+    {
+      var marker = $('#marker');
+      $('#marker').css('left', e.pageX-marker.width()/2).css('top', e.pageY-marker.height()/2).show();
+    })
+}
+
+function map_point(event){
+  pos_x = event.offsetX?(event.offsetX):event.pageX-document.getElementById("pointer_div").offsetLeft;
+  pos_y = event.offsetY?(event.offsetY):event.pageY-document.getElementById("pointer_div").offsetTop;
+  console.log(pos_x+","+pos_y);
+  var show_x = document.getElementById("pos_x");
+  var show_y = document.getElementById("pos_y");
+
+  show_x.value = ""+pos_x;
+  show_y.value = ""+pos_y;
+}
+
+</script>
+
+<%- include layouts/footer.ejs %>

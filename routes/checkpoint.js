@@ -42,7 +42,16 @@ exports.list = function(req, res){
 };
 
 exports.add = function(req, res){
-  res.render('add_checkpoint',{page_title:"Add checkpoint"});
+  req.getConnection(function(err,connection){
+       
+    var query = connection.query('SELECT * FROM map',function(err,rows)
+    {
+      if(err)
+        console.log("Error Selecting : %s ",err );
+      console.log(rows);
+      res.render('add_checkpoint',{page_title:"Add checkpoint", maps:rows});
+    });
+  });
 };
 
 exports.edit = function(req, res){
@@ -74,9 +83,8 @@ exports.save = function(req,res){
     req.getConnection(function (err, connection) {
         
         var data = {
-            
-            //id    : input.id,
-            name  : input.name
+            name  : input.name//,
+            //map   : input.map                             
         };
         
         var query = connection.query("INSERT INTO checkpoint set ? ",data, function(err, rows)

@@ -14,7 +14,7 @@ exports.list = function(req, res)
 };
 
 exports.save = function(req,res){
-
+  var async = require('async');
   var input = JSON.parse(JSON.stringify(req.body));
   
   req.getConnection(function (err, connection) {

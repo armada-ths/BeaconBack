@@ -22,6 +22,7 @@ var company = require('./routes/company');
 var map = require('./routes/map');
 
 
+
 //var posix = require('posix');
 // raise maximum number of open file descriptors to 10k,
 //posix.setrlimit('nofile', { soft: 10000,  hard: 10000 });
@@ -134,6 +135,20 @@ if(arguments.length > 0){
   } 
 }
 
+var cache = require('memory-cache');
+
+var c = mysql.createConnection(db_options);
+
+c.connect(function(err) {
+  var query = c.query("SELECT * FROM company;", function(err, rows){
+
+    if (err)
+        console.log("Error inserting : %s ",err );
+    cache.put( "company_list", rows );
+    console.log(query.sql); //get raw query
+  });
+});
+
 app.get('/', routes.index);
 app.get('/checkpoint', checkpoint.list);
 app.get('/checkpoint/add', checkpoint.add);
@@ -160,7 +175,6 @@ app.get('armadaloppet/action/clear', action.clear_action);
 
 app.get('/armadaloppet', racetracker.list);
 app.get('/armadaloppet/checkpointMap', racetracker.checkpoint_map);
-//app.get('/armadaloppet/checkpointStatus', racetracker.checkpoint_status);
 app.get('/armadaloppet/GoalView', racetracker.goal_view);
 app.get('/isArmadaloppet', racetracker.is_armadaloppet);
 
@@ -174,9 +188,12 @@ app.get('/fair/report', report.list);
 app.get('/fair/report/clear', report.clear_report);
 
 app.get('/fair/map', map.list);
+app.get('/fair/map_list', map.list_api);
 
 app.get('/fair/company', company.list);
 app.get('/fair/company/show/:id', company.show);
+app.get('/fair/company/placement', company.placement);
+app.post('/fair/company/save_placement', company.save_placement);
 
 app.get('/fair/user', user.list);
 app.get('fair/user/show/:id', user.show)

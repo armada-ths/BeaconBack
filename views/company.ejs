@@ -1,0 +1,55 @@
+<%- include layouts/header.ejs %>
+
+        <div class="page-data">
+         <div class="data-btn">
+           <button onClick="placeCompany();">Placement</button>
+         </div>
+         <div class="data-table">
+            <table border="1" cellpadding="7" cellspacing="7">
+                <tr>
+                    <th width="50px">No</th>
+                    <th>Name</th>
+                    <th>Company ID</th>
+                    <th>Map</th>
+                    <th>Location</th>
+                    <th width="120px">Action</th>
+                </tr>
+                               
+                <% if(companies.length){ 
+                                
+                 for(var i = 0;i < companies.length;i++) { %>
+                 
+                <tr>
+                    <td><%=(i+1)%></td>
+                    <td><%=companies[i].company_name%></td>
+                    <td><%=companies[i].company_id%></td>
+                    <% if(companies[i].map){ %>
+                        <td><%=companies[i].map%></td>
+                    <% } %>
+                    <% if(companies[i].location){ %>
+                        <td><%=companies[i].location.x +',' + companies[i].location.y%></td>
+                    <% } %>
+                </tr>
+            <% }
+            
+             }else{ %>
+                 <tr>
+                    <td colspan="5">No company</td>
+                 </tr>
+            <% } %>
+                
+                              
+                
+            </table>
+         </div>
+        </div>
+
+
+<script type="text/javascript">
+    function placeCompany(){
+            
+    window.location.href = '/fair/company/placement';
+}
+</script>
+        
+<%- include layouts/footer.ejs %>

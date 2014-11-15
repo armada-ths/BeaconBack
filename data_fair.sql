@@ -27,9 +27,6 @@ DROP TABLE IF EXISTS `map`;
 DROP TABLE IF EXISTS `user`;
 
 
-
-
-
 CREATE TABLE IF NOT EXISTS `map` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `map_name` varchar(25) NOT NULL,
@@ -50,12 +47,11 @@ CREATE TABLE IF NOT EXISTS `company` (
 )ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(5) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `user_name` varchar(50),
   `user_programme` varchar(50),
   `user_email` varchar(50),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`user_id`)
 )ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 --
@@ -65,11 +61,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 CREATE TABLE IF NOT EXISTS `checkpoint` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `company` int(11),
-  `map` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`map`) REFERENCES `map` (`id`),
-  FOREIGN KEY (`company`) REFERENCES `company` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 --
@@ -106,15 +98,11 @@ CREATE TABLE IF NOT EXISTS `report` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type_id` int(11) NOT NULL,
   `user` int(11) NOT NULL,
-  `beacon` int(11) NOT NULL,
-  `checkpoint` int(11) NOT NULL,
   `location` POINT NOT NULL,
   `map` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`beacon`) REFERENCES `beacon` (`id`),
-  FOREIGN KEY (`user`) REFERENCES `user` (`id`),
-  FOREIGN KEY (`map`) REFERENCES `map` (`id`),
-  FOREIGN KEY (`checkpoint`) REFERENCES `checkpoint` (`id`)
+  FOREIGN KEY (`user`) REFERENCES `user` (`user_id`),
+  FOREIGN KEY (`map`) REFERENCES `map` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `hit` (

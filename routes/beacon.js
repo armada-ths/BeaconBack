@@ -11,22 +11,8 @@ exports.list = function(req, res){
         {
             if(err)
                 console.log("Error Selecting : %s ",err );
-
-            var checkpoint_translationlist = [];
-            for(var i =0; i < rows.length; i++){
-              var cQuery = connection.query('SELECT * FROM checkpoint WHERE id ='+rows[i].checkpoint_id,function(err,checkp)
-              {
-                if(err){
-                  console.log("Error Selecting : %s ",err );
-                  checkpoint_translationlist.push(row[i].checkpoint_id);
-                }
-                else{
-                  checkpoint_translationlist.push(checkp.name);
-                }
-              });
-            }
-            
-            res.render('beacon',{page_title:"Beacons",data:rows, checkpoint_names:checkpoint_translationlist});
+            console.log(rows);
+            res.render('beacon',{page_title:"Beacons",data:rows});
          });
          console.log(query.sql);
     });
@@ -84,14 +70,16 @@ exports.save = function(req,res){
         var data = {
             id            : input.id,
             name          : input.name,
-            checkpoint_id : input.checkpoint,
-            location      : 'POINT('+input.pos_x+','+pos_y+')'
+            checkpoint : input.checkpoint,
+            location      : 'POINT('+input.pos_x+','+input.pos_y+')',
             pos_longitude : input.pos_longitude,
             pos_latitude  : input.pos_latitude,
             map           : input.map
         };
         
-        var query = connection.query("INSERT INTO beacon set ? ",data, function(err, rows)
+        var query = connection.query("INSERT INTO beacon set id = ?, name = ?, checkpoint = ?, location = GeomFromText(?), pos_longitude = ?, pos_latitude = ?, map = ? ",[input.id, 
+        input.name,input.checkpoint, 'POINT('+input.pos_x+' '+input.pos_y+')', input.pos_longitude,
+        input.pos_latitude, input.map], function(err, rows)
         {
   
           if (err)

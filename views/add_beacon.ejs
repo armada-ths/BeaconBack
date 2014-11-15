@@ -22,7 +22,7 @@
             <div class="maptag_box" id="maptag_box" style="display:none">
                 <fieldset id="optional">
                         
-                        <select name="map_select", id="map_select", onchange="map_switch()">
+                        <select name="map", id="map_select", onchange="map_switch()">
                           <% if(maps.length){
                             for(var i = 0;i < maps.length;i++) { %>
                                 <option value="<%=maps[i].id%>"><%= maps[i].map_name %></option>
@@ -35,9 +35,7 @@
                         <td>: <input type="text" name="pos_y" id="pos_y"></td>
                         <div class="pointer_div" id="pointer_div" onclick="map_point(event)"></div>
                 </fieldset>
-                
             </div>
-
             <label for="geotag_check">GeoTag</label>
             <input type="checkbox" id="geotag_check" name="geotag_check" value="no"
                     onclick="showHideGeoInfo()">
