@@ -191,12 +191,16 @@ app.get('/fair/map', map.list);
 app.get('/fair/map_list', map.list_api);
 
 app.get('/fair/company', company.list);
-app.get('/fair/company/show/:id', company.show);
+//app.get('/fair/company/show/:id', company.show);
 app.get('/fair/company/placement', company.placement);
 app.post('/fair/company/save_placement', company.save_placement);
 
 app.get('/fair/user', user.list);
-app.get('fair/user/show/:id', user.show)
+app.get('/fair/user/story/:id', user.story);
+
+app.get('/fair/userstories', fair.user_stories);
+app.get('/fair/beacontraffic/:id', fair.beacon_show);
+app.get('/fair/heatmap', fair.heatmap);
 
 app.use(app.router);
 

@@ -1,0 +1,25 @@
+<%- include layouts/header.ejs %>
+
+    <div class="page-data">
+        <select name="map_select", id="map_select", onchange="map_switch()">
+          <% if(maps.length){
+            for(var i = 0;i < maps.length;i++) { %>
+                <option value="<%=maps[i].id%>"><%= maps[i].map_name %></option>
+            <% }
+          } %>
+        </select>
+        <div class="image-container" id="heatmap"></div>
+
+    </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script>
+function map_switch(){
+ var select = document.getElementById('map_select');
+ //alert(window.location.hostname+":"+window.location.port+"/public/map_templates/"+select.value)
+ $('#heatmap').css('background-image', "url(../../map_templates/"+select.options[select.selectedIndex].text+")");
+}
+
+</script>
+
+<%- include layouts/footer.ejs %>

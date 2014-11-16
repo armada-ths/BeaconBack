@@ -20,7 +20,7 @@ exports.is_fair = function(req, res)
   });
 }
 
-exports.heat_map = function(req, res){
+exports.heatmap = function(req, res){
     var async = require('async');
     req.getConnection(function(err,connection)
     {
@@ -39,41 +39,41 @@ exports.heat_map = function(req, res){
     });
 };
 
-exports.user_story = function(req, res){
+exports.user_stories = function(req, res){
   var async = require('async');
   req.getConnection(function(err,connection)
   {
-    var report_query = connection.query('SELECT * FROM report WHERE user = ?',input.user,function(err,beacon_rows)
+    var report_query = connection.query('SELECT * FROM report ORDER timestamp ASC SPLIT BY user',function(err,report_rows)
     {
-        if(err)
-        {
-            console.log("Error Selecting : %s ",err );
-        }
-        else
-        {
-            
-        }
-        console.log(report_query.sql);
+      if(err)
+      {
+        console.log("Error Selecting : %s ",err );
+      }
+      else
+      {
+        res.render('fair_userstory',{page_title:"Fair user stories", data:report_rows});
+      }
+      console.log(report_query.sql);
     });    
   });
 };
 
 exports.beacon_show = function(req, res){
-    req.getConnection(function(err,connection)
+  var input = req.params;
+  req.getConnection(function(err,connection)
+  {
+    var report_query = connection.query('SELECT * FROM report WHERE id IN (SELECT report FROM hit WHERE beacon=?) ORDER BY timestamp ASC',input.id,function(err,beacon_rows)
     {
-      var report_query = connection.query('SELECT * FROM report WHERE id IN (SELECT report FROM hit WHERE beacon=?)',input.beacon,function(err,beacon_rows)
-      //ADD event_assoc_id after armadaloppet
+      if(err)
       {
-          if(err)
-          {
-              console.log("Error Selecting : %s ",err );
-          }
-          else
-          {
-              
-          }
-          console.log(report_query.sql);
-      });    
-    });
+          console.log("Error Selecting : %s ",err );
+      }
+      else
+      {
+          res.render('traffic_beacon',{page_title:"Beacon traffic", data:beacon_rows});
+      }
+      console.log(report_query.sql);
+    });    
+  });
 };
 

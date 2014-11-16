@@ -15,10 +15,10 @@ a {
 }
 
 #pointer_div{
-  background-repeat: no-repeat;
-  background-size: cover;
-  width:1000px;
-  height: 1000px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
 }
 
 .map-label {

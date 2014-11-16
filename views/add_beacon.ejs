@@ -33,7 +33,7 @@
                         <td>: <input type="text" name="pos_x" id="pos_x"></td>
                         <td class="label">y</td>
                         <td>: <input type="text" name="pos_y" id="pos_y"></td>
-                        <div class="pointer_div" id="pointer_div" onclick="map_point(event)"></div>
+                        <img class="pointer_div" id="pointer_div" onclick="map_point(event)"></div>
                 </fieldset>
             </div>
             <label for="geotag_check">GeoTag</label>
@@ -64,7 +64,12 @@
 function map_switch(){
  var select = document.getElementById('map_select');
  //alert(window.location.hostname+":"+window.location.port+"/public/map_templates/"+select.value)
- $('#pointer_div').css('background-image', "url(../map_templates/"+select.options[select.selectedIndex].text+")");
+ $('#pointer_div').attr('src',"/map_templates/"+select.options[select.selectedIndex].text+"" );
+ $('#pointer_div').click(function(e)
+    {
+      var marker = $('#marker');
+      $('#marker').css('left', e.pageX-marker.width()/2).css('top', e.pageY-marker.height()/2).show();
+    })
 }
 
 function map_point(event){
@@ -89,17 +94,17 @@ function showHideMapInfo()
             document.getElementById('maptag_box').style.display='none';
     }
     var select = document.getElementById('map_select');
-    
-    //alert(maps)
+    $('#pointer_div').attr('src',"/map_templates/"+select.options[select.selectedIndex].text+"" );
+    //alert(maps)('#pointer_div')
     //alert("/map_templates/"+select.options[select.selectedIndex].text);
-    $('#pointer_div').css('background-image', "url(../map_templates/"+select.options[select.selectedIndex].text+")");
-    $('#pointer_div').css('visibility','visible');
-
-    $('#pointer_div').click(function(e)
-    {
-      var marker = $('#marker');
-      $('#marker').css('left', e.pageX-marker.width()/2).css('top', e.pageY-marker.height()/2).show();
-    })
+    var img = document.getElementById('pointer_div');
+    img.onload = function(){
+      var height = img.naturalHeight;
+      var width = img.naturalWidth;
+      img.style.height =height+"px";
+      img.style.width =width+"px";
+      // code here to use the dimensions
+    }
 }
 
 

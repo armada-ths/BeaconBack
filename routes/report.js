@@ -16,10 +16,10 @@ exports.save = function(req,res){
   var async = require('async');
   var cache = require('memory-cache');
   var input = JSON.parse(JSON.stringify(req.body));
-  
+  beacon_ins = input.beacons.toString()
   req.getConnection(function (err, connection)
   {
-    var b_query = connection.query("SELECT * FROM beacon WHERE id IN (?);",input.beacons.toString(), function(err, beacon_rows)
+    var b_query = connection.query("SELECT * FROM beacon WHERE id IN ("+beacon_ins+");", function(err, beacon_rows)
     {
       if (err)
       {
@@ -28,7 +28,7 @@ exports.save = function(req,res){
       }
       else
       {
-        console.log(beacon_rows);
+        //console.log(beacon_rows);
         var m_query = connection.query("SELECT * FROM map WHERE id = ?;",beacon_rows[0].map, function(err, map_row)
         {
           if (err)
@@ -38,8 +38,8 @@ exports.save = function(req,res){
           }
           else
           {
-            var u_query = connection.query("INSERT INTO user (user_id) VALUES(?);",
-              input.user_id, function(err, user_row)
+            var u_query = connection.query("INSERT IGNORE INTO user SET user_id=?;",
+              [input.user_id, input.user_id], function(err, user_row)
             {
               if (err)
               {
@@ -51,17 +51,25 @@ exports.save = function(req,res){
                 //Ta ut users position
                 var sum_x = 0;
                 var sum_y = 0;
+                var nr_beacons = 0;
+                //console.log("THE RECEIVED BEACONS"+beacon_rows.length);
                 async.forEach(beacon_rows, function(beacon_row, callback) {
-                  sum_x += beacon_row.location.x;
-                  sum_y += beacon_row.location.y;
+                  console.log(beacon_row.map, map_row[0].id);
+                  if(beacon_row.map == map_row[0].id){
+                    sum_x += beacon_row.location.x;
+                    sum_y += beacon_row.location.y;
+                    nr_beacons += 1;
+                  }
+                  
                   callback();
                 }, function(err) {
                   if (err) return next(err);
-                  var pos_x = sum_x/beacon_rows.length;
-                  var pos_y = sum_y/beacon_rows.length;
+
+                  var pos_x = sum_x/nr_beacons;
+                  var pos_y = sum_y/nr_beacons;
                   console.log(pos_x, pos_y);
                   sLocation ='POINT('+pos_x+' '+pos_y+')';
-                  console.log([input.type_id, input.user_id, sLocation, map_row[0].id]);
+                  //console.log([input.type_id, input.user_id, sLocation, map_row[0].id]);
                   var r_query = connection.query("INSERT INTO report SET type_id=?, user=?, location=GeomFromText(?), map=? ;",
                     [input.type_id, input.user_id, sLocation, map_row[0].id], function(err, result)
                   {
@@ -72,17 +80,24 @@ exports.save = function(req,res){
                     }
                     else
                     {
-                      console.log(result);
+
                       async.forEach(beacon_rows, function(beacon_row, callback) {
-                        var hit_query = connection.query('INSERT INTO hit set beacon=?, report=?, checkpoint = (SELECT id from checkpoint WHERE id = (SELECT checkpoint FROM beacon WHERE id = ?));',[beacon_row.id, result.insertId,beacon_row.id],function(err,action_rows)
-                        {
-                            if(err)
-                            {
-                                console.log("Error Selecting : %s ",err );
-                            }
-                            console.log(hit_query.sql);
-                            callback();
-                        });
+                        //console.log(beacon_row.map, map_row[0].id);
+                        if(beacon_row.map == map_row[0].id){
+                          var hit_query = connection.query('INSERT INTO hit set beacon=?, report=?, checkpoint = (SELECT id from checkpoint WHERE id = (SELECT checkpoint FROM beacon WHERE id = ?));',[beacon_row.id, result.insertId,beacon_row.id],function(err,hit_resluts)
+                          {
+                              if(err)
+                              {
+                                  console.log("Error Selecting : %s ",err );
+                              }
+                              console.log(hit_query.sql);
+                              callback();
+                          });
+
+                        }
+                        else{
+                          callback();
+                        }
                       }, function(err) {
                         if (err) return next(err);
                         if(input.type_id == 0){
@@ -118,7 +133,7 @@ exports.save = function(req,res){
 
                           }, function(err) {
                             if (err) return next(err);
-                              res.json({'user_location': ""+pos_x+','+pos_y, 'companies': [adjecent_list], 'map': map_row[0]})
+                              res.json({'user_location': ""+pos_x+','+pos_y, 'companies': adjecent_list, 'map': map_row[0]})
                           });
                         }
                       });
@@ -143,12 +158,12 @@ exports.list = function(req, res)
 {
   req.getConnection(function(err,connection)
   {
-    var query = connection.query('SELECT * FROM action ORDER BY timestamp DESC',function(err,rows)
+    var query = connection.query('SELECT * FROM report ORDER BY timestamp ASC',function(err,rows)
     {
       if(err)
           console.log("Error Selecting : %s ",err );
 
-      res.render('action',{page_title:"Actions",data:rows});
+      res.render('report',{page_title:"Reports",data:rows});
      });
      console.log(query.sql);
   });
@@ -159,13 +174,25 @@ exports.clear_report = function(req,res){
   
    req.getConnection(function (err, connection) {
       
-      connection.query("DELETE FROM action", function(err, rows)
+      connection.query("DELETE FROM hit", function(err, rows)
       {
           
-           if(err)
-               console.log("Error deleting : %s ",err );
+       if(err)
+           console.log("Error deleting : %s ",err );
           
-           res.redirect('/action');
+        req.getConnection(function (err, connection) {
+    
+          connection.query("DELETE FROM report", function(err, rows)
+          {
+              
+           if(err)
+              console.log("Error deleting : %s ",err );
+          
+            res.redirect('/fair/report');
+               
+          });
+          
+       });
            
       });
       

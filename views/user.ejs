@@ -1,0 +1,55 @@
+<%- include layouts/header.ejs %>
+
+        <div class="page-data">
+         <div class="data-btn">
+           <button onClick="showStories();">User stories</button>
+         </div>
+         <div class="data-table">
+            <table border="1" cellpadding="7" cellspacing="7">
+                <tr>
+                    <th width="50px">No</th>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Programme</th>
+                    <th width="120px">Action</th>
+                </tr>
+                               
+                <% if(data.length){ 
+                                
+                 for(var i = 0;i < data.length;i++) { %>
+                 
+                <tr>
+                    <td><%=(i+1)%></td>
+                    <td><%=data[i].user_id%></td>
+                    <% if(data[i].user_name){ %>
+                        <td><%=data[i].user_name%></td>
+                    <% } %>
+                    <% if(data[i].user_email){ %>
+                        <td><%=data[i].user_email%></td>
+                    <% } %>
+                    <% if(data[i].user_programme){ %>
+                        <td><%=data[i].user_programme%></td>
+                    <% } %>
+                    <td>
+                        <a class="a-inside edit" href="../fair/user/story/<%=data[i].user_id%>">Story</a>
+                    </td>
+                </tr>
+            <% }
+            
+             }else{ %>
+                 <tr>
+                    <td colspan="5">No beacon</td>
+                 </tr>
+            <% } %>    
+                
+            </table>
+         </div>
+        </div>
+<script type="text/javascript">
+    function userStories(){
+            
+    window.location.href = '/fair/userstory';
+}
+</script>
+<%- include layouts/footer.ejs %>

@@ -1,0 +1,69 @@
+<%- include layouts/header.ejs %>
+
+<div class="page-data">
+<input type="checkbox" onclick="toggleAutoRefresh(this);" id="reloadCB"> Auto Refresh
+<b>
+    <% if(data.length){ %>
+        <%=(data.length)%> Entires
+    <% } %>
+</b>
+ <div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th width="100px">Time</th>
+            <th>User</th>
+            <th>Map</th>
+            <th>Location</th>
+
+        </tr>
+
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+        <tr>
+            <td><%=(data[i].timestamp)%></td>
+            <td><%=data[i].user%></td>
+            <% if(data[i].map){ %>
+                <td><%=data[i].map%></td>
+            <% } %>
+            <% if(data[i].location){ %>
+                <td><%=data[i].location.x +',' + data[i].location.y%></td>
+            <% } %>
+
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="6">No action</td>
+         </tr>
+    <% } %>
+        
+                      
+        
+    </table>
+ </div>
+</div>
+<script>
+var reloading;
+
+function checkReloading() {
+    if (window.location.hash=="#autoreload") {
+        reloading=setTimeout("window.location.reload();", 5000);
+        document.getElementById("reloadCB").checked=true;
+    }
+}
+
+function toggleAutoRefresh(cb) {
+    if (cb.checked) {
+        window.location.replace("#autoreload");
+        reloading=setTimeout("window.location.reload();", 5000);
+    } else {
+        window.location.replace("#");
+        clearTimeout(reloading);
+    }
+}
+
+window.onload=checkReloading;
+</script>
+<%- include layouts/footer.ejs %>

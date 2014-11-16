@@ -2,31 +2,28 @@ exports.list = function(req, res)
 {
   req.getConnection(function(err,connection)
   {
-    var user_query = connection.query('SELECT user_id FROM action GROUP BY user_id',function(err,user_rows)
+    var user_query = connection.query('SELECT * FROM user',function(err,user_rows)
     {
       if(err)
           console.log("Error Selecting : %s ",err );
 
-      res.render('action',{page_title:"Actions",data:rows});
+      res.render('user',{page_title:"Actions",data:user_rows});
      });
-     console.log(query.sql);
+     console.log(user_query.sql);
   });
 }
-exports.show = function(req, res){
+exports.story = function(req, res){
     
     var id = req.params.id;
     
     req.getConnection(function(err,connection){
-       
-        var query = connection.query('SELECT * FROM checkpoint WHERE id = ?',[id],function(err,rows)
+        var query = connection.query('SELECT * FROM report WHERE user=? ORDER BY timestamp ASC',[id],function(err,rows)
         {
             
             if(err)
                 console.log("Error Selecting : %s ",err );
      
-            res.render('show_checkpoint',{page_title:"checkpoint",data:rows});
-                
-           
+            res.render('show_user',{page_title:"User story",data:rows});
          });
          
          console.log(query.sql);
