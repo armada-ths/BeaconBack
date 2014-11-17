@@ -132,7 +132,7 @@ if(arguments.length > 0){
         }
       });
     });
-  } 
+  }
   if(arguments[0] == "--update_user_info"){
     var req = http.get('http://127.0.0.1:3000/api/booth_vote_info.json', function(res){
       var body = '';
@@ -164,6 +164,7 @@ if(arguments.length > 0){
       });
     });
   } 
+  process.exit(code=0)
 }
 
 var cache = require('memory-cache');
