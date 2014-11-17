@@ -14,10 +14,11 @@
             <th>User</th>
             <th>Map</th>
             <th>Location</th>
+            <th>Hits</th>
 
         </tr>
 
-        <% if(data.length){ 
+        <% if(data.length){
                         
          for(var i = 0;i < data.length;i++) { %>
         <tr>
@@ -29,7 +30,13 @@
             <% if(data[i].location){ %>
                 <td><%=data[i].location.x +',' + data[i].location.y%></td>
             <% } %>
-
+            <td> 
+            <% if(data[i].beacons.length){     %>   
+                <%for(var j = 0;j < data[i].beacons.length;j++) {%>
+                     <%=data[i].beacons[j].name %>
+               <%}
+            }%>
+            </td>
         </tr>
     <% }
     
@@ -38,11 +45,9 @@
             <td colspan="6">No action</td>
          </tr>
     <% } %>
-        
-                      
-        
     </table>
  </div>
+
 </div>
 <script>
 var reloading;
