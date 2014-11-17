@@ -26,6 +26,9 @@ exports.save = function(req,res){
           console.log("Error inserting : %s ",err );
           res.json({'status':"QUERY_FAILED"})
       }
+      if(beacon_rows.length == 0){
+        res.json({'status':"QUERY_FAILED"})
+      }
       else
       {
         //console.log(beacon_rows);
@@ -168,7 +171,8 @@ exports.list = function(req, res)
      console.log(query.sql);
   });
 };
-exports.clear_report = function(req,res){
+exports.clear_report = function(req,res)
+{
         
    var id = req.params.id;
   

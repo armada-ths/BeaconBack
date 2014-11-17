@@ -44,3 +44,17 @@ exports.story = function(req, res)
     console.log(query.sql);
   }); 
 };
+
+exports.clear = function(req,res)
+{
+  req.getConnection(function (err, connection) 
+  {
+    connection.query("DELETE FROM user", function(err, rows)
+    {
+      if(err)
+        console.log("Error deleting : %s ",err );
+    
+      res.redirect('/fair/user');    
+    });
+ });
+};

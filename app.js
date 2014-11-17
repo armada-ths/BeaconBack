@@ -221,6 +221,7 @@ app.get('/fair/report/clear', report.clear_report);
 
 app.get('/fair/map', map.list);
 app.get('/fair/map_list', map.list_api);
+app.get('/fair/map/get/:id', map.api_get);
 
 app.get('/fair/company', company.list);
 //app.get('/fair/company/show/:id', company.show);
@@ -229,6 +230,7 @@ app.post('/fair/company/save_placement', company.save_placement);
 
 app.get('/fair/user', user.list);
 app.get('/fair/user/story/:id', user.story);
+app.get('/fair/user/clear', user.clear);
 
 app.get('/fair/userstories', fair.user_stories);
 app.get('/fair/beacontraffic/:id', fair.beacon_show);
