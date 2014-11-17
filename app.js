@@ -72,7 +72,7 @@ var arguments = process.argv.slice(2);
 console.log(arguments);
 if(arguments.length > 0){
   if(arguments[0] == "--update_companies"){
-    var req = http.get('http://127.0.0.1:3000/api/map_info.json', function(res){
+    var req = http.get('http://armada.nu/api/map_info.json', function(res){
       var body = '';
 
       res.on('data', function(chunk) {
