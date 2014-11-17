@@ -133,6 +133,37 @@ if(arguments.length > 0){
       });
     });
   } 
+  if(arguments[0] == "--update_user_info"){
+    var req = http.get('http://127.0.0.1:3000/api/booth_vote_info.json', function(res){
+      var body = '';
+
+      res.on('data', function(chunk) {
+          body += chunk;
+      });
+
+      res.on('end', function() {
+        var response = JSON.parse(body)
+        response.forEach(function(input){
+          var data = {
+              user_id    : input.user_id,
+              user_name  : input.name,
+              user_programme : input.program,
+              user_email    : input.mail
+          };
+          var c = mysql.createConnection(db_options);
+
+          c.connect(function(err) {
+            var query = c.query("UPDATE user SET user_name=?, user_email=?, user_programme=? WHERE user_id=?",
+              [data.user_name, data.user_email, data.user_programme, data.user_id], function(err, rows){
+              if (err)
+                  console.log("Error inserting : %s ",err );
+              console.log(query.sql); //get raw query
+            });
+          });
+        });
+      });
+    });
+  } 
 }
 
 var cache = require('memory-cache');
