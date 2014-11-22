@@ -26,9 +26,10 @@ exports.save = function(req,res){
           console.log("Error inserting : %s ",err );
           res.json({'status':"QUERY_FAILED"})
       }
-      if(beacon_rows.length == 0){
+      if(!beacon_rows){
         res.json({'status':"QUERY_FAILED"})
       }
+      
       else
       {
         //console.log(beacon_rows);
@@ -161,7 +162,7 @@ exports.list = function(req, res)
 {
   req.getConnection(function(err,connection)
   {
-    var query = connection.query('SELECT * FROM report ORDER BY timestamp ASC',function(err,rows)
+    var query = connection.query('SELECT * FROM report ORDER BY timestamp DESC',function(err,rows)
     {
       if(err)
           console.log("Error Selecting : %s ",err );
