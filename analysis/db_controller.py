@@ -12,12 +12,12 @@ import logging
 #####################################################
 #           Define DB Settings
 #####################################################
-DB_URL = "server.oskarlundh.eu" #local ip 192.168.1.5
+DB_URL = "localhost" #local ip 192.168.1.5
 DB_NAME = 'armada_fair_test'
 DB_USER = "root"
 DB_PASSWORD = "password"
 
-logging.basicConfig(filename='database.log', level=logging.ERROR)
+logging.basicConfig(filename='database.log',level=logging.ERROR)
 #####################################################
 class DataBase:
     #####################################################
