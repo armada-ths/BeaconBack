@@ -30,17 +30,36 @@ def user_stats(reports):
     print("There were {0} vistors at the fair".format(len(list(users.keys()))))
 
 
+def users_on_map(map, reports):
+    users = dict()
+    for report in reports:
+        #print(report)
+        #print report['user'][0]['user_id']
+        if report['map'][0]['map_name'] == map:
+            if report['user'][0]['user_id'] in users.keys():
+                users[report['user'][0]['user_id']].append(report)
+            else:
+                users[report['user'][0]['user_id']] = [report]
+    return users
+
+
 def user_paths(reports):
     maps = dict()
     for report in reports:
         #print(report)
         #print report['user'][0]['user_id']
         if report['map'][0]['id'] in maps.keys():
-            maps[report['map'][0]['id']].append(report)
+
+            pass
         else:
-            maps[report['map'][0]['id']] = [report]
+            key = report['map'][0]['id']
+            maps[key] = dict()
+            maps[key]["map_name"] = report['map'][0]['map_name']
+            maps[key]['height'] =report['map'][0]['height']
+            maps[key]['width'] =report['map'][0]['width']
+
     for map in maps.keys():
-        user_stories.show_path(maps[map])
+        user_stories.show_path(maps[map], users_on_map(maps[map]['map_name'], reports))
 
 
 if __name__ == "__main__":
