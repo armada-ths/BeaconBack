@@ -44,14 +44,21 @@ def show_path(map, users):
             #               (float(reports[i+1]['location'][0]), float(reports[i+1]['location'][1]))], fill=color, outline=color)
         #seen = set()
     #seen_add = seen.add
+    counts = dict()
     pts = list()
     for user in users.keys():
         reports = users[user]
         for x in reports:
             pts.append((float(x['location'][0]), float(x['location'][1])))
+            if not counts[(float(x['location'][0]), float(x['location'][1]))]:
+                counts[(float(x['location'][0]), float(x['location'][1]))] = 1
+            else:
+                counts[(float(x['location'][0]), float(x['location'][1]))] += 1
     #pts = [(random.random(), random.random()) for x in range(100)]
     #print len(pts), pts
     #print map_width, map_height
+    for x in counts.keys():
+        draw.text(x, counts[x])
 
     hm = heatmap.Heatmap()
     heatmap_name = "heatmaps/"+mapname
