@@ -32,7 +32,7 @@ class DataBase:
             result = self.cursor.fetchone()
 
             if result:
-                print("Connected!")
+                #print("Connected!")
                 self.cursor.execute('SHOW TABLES')
                 result = self.cursor.fetchall()
                 #print(result)
