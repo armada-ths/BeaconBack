@@ -7,6 +7,7 @@ database_controller = db.DataBase()
 
 def beacon_stats(reports):
     beacons = dict()
+    sum = 0
     for report in reports:
         if report['beacons'][0]['name'] in beacons.keys():
             beacons[report['beacons'][0]['name']].append(report)
@@ -14,7 +15,9 @@ def beacon_stats(reports):
             beacons[report['beacons'][0]['name']] = [report]
 
     for beaconK in beacons.keys():
+        sum += len(beacons[beaconK])
         print("{0} had {1} traffic".format(beaconK, len(beacons[beaconK])))
+    print("Total traffic during fair: {0}".format(sum))
 
 
 def user_stats(reports):
