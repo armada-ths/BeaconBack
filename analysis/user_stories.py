@@ -21,42 +21,45 @@ def show_path(map, users):
     draw = ImageDraw.Draw(im)
 
 
-    for user in users.keys():
-        color = random_color()
-        reports = users[user]
-        for i in range(len(reports)-1):
-            if i == 0:
-                draw.ellipse((float(reports[i]['location'][0])-5, float(reports[i]['location'][1])-5,
-                              float(reports[i]['location'][0])+5, float(reports[i]['location'][1])+5), fill = 'green', outline ='green')
-            elif i == len(reports)-2:
-                draw.ellipse((float(reports[i]['location'][0])-5, float(reports[i]['location'][1])-5,
-                              float(reports[i]['location'][0])+5, float(reports[i]['location'][1])+5), fill = 'red', outline ='red')
-            #else:
-            #    draw.ellipse((float(reports[i]['location'][0])-2, float(reports[i]['location'][1])-2,
-            #                  float(reports[i]['location'][0])+2, float(reports[i]['location'][1])+2), fill = 'blue', outline ='blue')
-            #print reports[i]['location'], float(reports[i]['location'][0])
-            draw.line((float(reports[i]['location'][0]), float(reports[i]['location'][1]),
-                       float(reports[i+1]['location'][0]),float(reports[i+1]['location'][1])), fill=color, width=1)
-            #rads = math.atan2(reports[i]['location'][1]-reports[i+1]['location'][1], reports[i]['location'][0]-reports[i+1]['location'][0])
-            #rads %= 2*math.pi
-            #degs = math.degrees(rads)
-            #draw.polygon([(float(reports[i]['location'][0]), float(reports[i]['location'][1])),
-            #               (float(reports[i+1]['location'][0]), float(reports[i+1]['location'][1]))], fill=color, outline=color)
+    # for user in users.keys():
+    #     color = random_color()
+    #     reports = users[user]
+    #     for i in range(len(reports)-1):
+    #         if i == 0:
+    #             draw.ellipse((float(reports[i]['location'][0])-5, float(reports[i]['location'][1])-5,
+    #                           float(reports[i]['location'][0])+5, float(reports[i]['location'][1])+5), fill = 'green', outline ='green')
+    #         elif i == len(reports)-2:
+    #             draw.ellipse((float(reports[i]['location'][0])-5, float(reports[i]['location'][1])-5,
+    #                           float(reports[i]['location'][0])+5, float(reports[i]['location'][1])+5), fill = 'red', outline ='red')
+    #         #else:
+    #         #    draw.ellipse((float(reports[i]['location'][0])-2, float(reports[i]['location'][1])-2,
+    #         #                  float(reports[i]['location'][0])+2, float(reports[i]['location'][1])+2), fill = 'blue', outline ='blue')
+    #         #print reports[i]['location'], float(reports[i]['location'][0])
+    #         draw.line((float(reports[i]['location'][0]), float(reports[i]['location'][1]),
+    #                    float(reports[i+1]['location'][0]),float(reports[i+1]['location'][1])), fill=color, width=1)
+    #         #rads = math.atan2(reports[i]['location'][1]-reports[i+1]['location'][1], reports[i]['location'][0]-reports[i+1]['location'][0])
+    #         #rads %= 2*math.pi
+    #         #degs = math.degrees(rads)
+    #         #draw.polygon([(float(reports[i]['location'][0]), float(reports[i]['location'][1])),
+    #         #               (float(reports[i+1]['location'][0]), float(reports[i+1]['location'][1]))], fill=color, outline=color)
         #seen = set()
     #seen_add = seen.add
     counts = dict()
     pts = list()
-    # for user in users.keys():
-    #     reports = users[user]
-    #     for x in reports:
-    #         pts.append((float(x['location'][0]), float(x['location'][1])))
-    #         if not counts[str((float(x['location'][0]), float(x['location'][1])))]:
-    #             counts[str((float(x['location'][0]), float(x['location'][1])))] = 1
-    #         else:
-    #             counts[str((float(x['location'][0]), float(x['location'][1])))] += 1
-    #
-    # for x in counts.keys():
-    #     draw.text(x, counts[x])
+    for user in users.keys():
+        reports = users[user]
+        for x in reports:
+            cord =(float(x['location'][0]), float(x['location'][1]))
+            s_cord = str(x['location'][0]+","+x['location'][1])
+            pts.append(cord)
+            if not s_cord in counts.keys():
+                counts[s_cord] = 1
+            else:
+                counts[s_cord] += 1
+
+    for x in counts.keys():
+        print x
+        draw.text(tuple(float(a) for a in x.split(",")), str(counts[x]), fill=(255,0,0,255))
 
     hm = heatmap.Heatmap()
     heatmap_name = "heatmaps/"+mapname
