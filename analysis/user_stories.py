@@ -58,7 +58,6 @@ def show_path(map, users):
                 counts[s_cord] += 1
 
     for x in counts.keys():
-        print x
         draw.text(tuple(float(a) for a in x.split(",")), str(counts[x]), fill=(255,0,0,255))
 
     hm = heatmap.Heatmap()
