@@ -62,10 +62,10 @@ def show_path(map, users):
 
     hm = heatmap.Heatmap()
     heatmap_name = "heatmaps/"+mapname
-    hm.heatmap(pts, size=(map_width, map_height)).save(heatmap_name)
+    hm.heatmap(pts,size=(map_width, map_height)).save(heatmap_name)
     heatmap_im = Image.open(heatmap_name)
 
-    im.paste(heatmap_im, (0, 0), heatmap_im)
+    #im.paste(heatmap_im, (0, 0), heatmap_im)
 
     #overlay = hm.convert("RGBA")
 
